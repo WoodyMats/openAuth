@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:autoTransition="animateToEnd"
+        motion:duration="2000"
+        motion:motionInterpolator="linear">
+       <KeyFrameSet>
+           <KeyAttribute
+               motion:motionTarget="@+id/logoLettersImageView"
+               motion:framePosition="86"
+               android:alpha="0.5" />
+           <KeyAttribute
+               motion:motionTarget="@+id/logoLettersImageView"
+               motion:framePosition="79"
+               android:translationY="30dp" />
+           <KeyAttribute
+               motion:motionTarget="@+id/logoImageView"
+               motion:framePosition="77"
+               android:translationY="30dp" />
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/logoLettersImageView"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0.0"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/logoImageView"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="1"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:translationY="-70dp"
+            android:scaleX="0.5"
+            android:scaleY="0.5" />
+        <Constraint
+            android:id="@+id/logoLettersImageView"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:translationY="40dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75" />
+    </ConstraintSet>
+</MotionScene>
