@@ -8,6 +8,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import com.woodymats.openauth.MainActivity
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.ActivitySplashScreenBinding
+import com.woodymats.openauth.ui.login.LoginActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -26,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                val sharedPref = this@SplashScreenActivity?.getPreferences(Context.MODE_PRIVATE)
+                val sharedPref = this@SplashScreenActivity.getPreferences(Context.MODE_PRIVATE)
                 val userToken = sharedPref.getString(getString(R.string.token), "")
                 if (!userToken.equals("")) {
                     startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java)

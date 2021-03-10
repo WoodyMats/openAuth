@@ -1,19 +1,17 @@
-package com.woodymats.openauth.retrofit
+package com.woodymats.openauth.network
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
     // TODO(Set the right url when it's ready)
-    final val BASE_URL: String = "https://"
+    final val BASE_URL: String = "https://www.google.gr/"
 
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    private val gson = GsonBuilder()
+        .create()
 
     val retrofitClient: Retrofit.Builder by lazy {
         val okhttpClient = OkHttpClient.Builder()
@@ -21,7 +19,7 @@ object RetrofitClient {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okhttpClient.build())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(GsonConverterFactory.create(gson))
     }
 
     val apiInterface: ApiCallsInterface by lazy {
@@ -29,5 +27,4 @@ object RetrofitClient {
             .build()
             .create(ApiCallsInterface::class.java)
     }
-
 }
