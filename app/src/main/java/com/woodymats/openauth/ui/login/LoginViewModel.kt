@@ -3,24 +3,28 @@ package com.woodymats.openauth.ui.login
 import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.User
 import com.woodymats.openauth.repositories.LoginRepository
 import com.woodymats.openauth.utils.ApiCallStatus
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import java.io.IOException
 
-class LoginViewModel(app: Application, private val repository: LoginRepository) :
-    AndroidViewModel(app) {
+class LoginViewModel(app: Application) : AndroidViewModel(app) {
 
     private val user: LoginEntity = LoginEntity("", "")
 
-    private val _dataState: MutableLiveData<User> = MutableLiveData()
+    private val repository = LoginRepository(getInstance(app))
+
+    private var _dataState: MutableLiveData<User> = MutableLiveData()
 
     val dataState: LiveData<User>
         get() = _dataState
@@ -73,15 +77,18 @@ class LoginViewModel(app: Application, private val repository: LoginRepository) 
         }
     }
 
-    fun userLogin(loginEntity: LoginEntity) {
+    private fun userLogin(loginEntity: LoginEntity) {
         viewModelScope.launch {
             _callStatus.value = ApiCallStatus.LOADING
+            _showLoading.value = true
             try {
-                val userFromNetwork = repository.api.loginUser(loginEntity)
-                repository.userDAO.insertUser(userFromNetwork)
-                _dataState.value = repository.userDAO.getUser()
-            } catch (e: Exception) {
+                delay(2000)
+                repository.loginUser(loginEntity)
+                _showLoading.value = false
+            } catch (e: IOException) {
+                Log.d("Hii", e.stackTraceToString())
                 _callStatus.value = ApiCallStatus.ERROR
+                _showLoading.value = false
             }
         }
     }

@@ -18,6 +18,9 @@ data class User(
     @ColumnInfo(name = "profileImage")
     var profileImage: String = "",
 
+    @ColumnInfo(name = "email")
+    var email: String = "",
+
     @ColumnInfo(name = "phone")
     var phone: String = ""
 )
