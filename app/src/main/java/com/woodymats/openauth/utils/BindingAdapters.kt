@@ -1,7 +1,6 @@
 package com.woodymats.openauth.utils
 
 import android.view.View
-import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("loadingInProcess")

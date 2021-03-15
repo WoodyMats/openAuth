@@ -78,18 +78,32 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/doNotHaveAccount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/have_not_account"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:onClick="@{viewModel::onSignUpClicked}"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout"
+        app:layout_constraintStart_toStartOf="@+id/passwordEditTextLayout"
+        app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:padding="8dp"
-        android:textAllCaps="false"
+        android:textAllCaps="true"
         android:text="@string/sign_in"
         android:onClick="@{viewModel::onLoginClicked}"
         app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout"
         app:layout_constraintStart_toStartOf="@+id/passwordEditTextLayout"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout" />
+        app:layout_constraintTop_toBottomOf="@id/doNotHaveAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

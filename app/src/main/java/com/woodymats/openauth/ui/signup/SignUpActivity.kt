@@ -1,4 +1,4 @@
-package com.woodymats.openauth.ui.login
+package com.woodymats.openauth.ui.signup
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,33 +7,25 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.woodymats.openauth.MainActivity
 import com.woodymats.openauth.R
-import com.woodymats.openauth.databinding.ActivityLoginBinding
-import com.woodymats.openauth.ui.signup.SignUpActivity
+import com.woodymats.openauth.databinding.ActivitySignUpBinding
 import com.woodymats.openauth.utils.ApiCallStatus
 
-class LoginActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityLoginBinding
-    private val viewModel: LoginViewModel by lazy {
-        ViewModelProvider(this).get(LoginViewModel::class.java)
+    lateinit var binding: ActivitySignUpBinding
+    private val viewModel: SignUpViewModel by lazy {
+        ViewModelProvider(this).get(SignUpViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
         setUpViewModel()
         setUpObservers()
         setContentView(binding.root)
     }
 
     private fun setUpObservers() {
-        viewModel.goToSignUp.observe(this, {
-            if (it) {
-                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
-                viewModel.onSignUpNavigateFinish()
-            }
-        })
-
         viewModel.errorMessage.observe(this, {
             if (!it.isNullOrEmpty()) {
                 Snackbar.make(
@@ -72,11 +64,13 @@ class LoginActivity : AppCompatActivity() {
 
                 ApiCallStatus.SUCCESS -> {
                     startActivity(
-                        Intent(this@LoginActivity, MainActivity::class.java)
+                        Intent(this@SignUpActivity, MainActivity::class.java)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     )
                     finish()
+                }
+                else -> { //Nothing to do!
                 }
             }
         })
@@ -85,9 +79,8 @@ class LoginActivity : AppCompatActivity() {
     private fun setUpViewModel() {
         binding.lifecycleOwner = this
         val application = requireNotNull(this).application
-        val viewModelFactory = LoginViewModelFactory(application)
+        val viewModelFactory = SignUpViewModelFactory(application)
         binding.viewModel =
-            ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
-        // binding.executePendingBindings()
+            ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
     }
 }

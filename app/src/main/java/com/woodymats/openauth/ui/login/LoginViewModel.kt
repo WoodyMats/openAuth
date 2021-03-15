@@ -3,22 +3,22 @@ package com.woodymats.openauth.ui.login
 import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.woodymats.openauth.R
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.User
 import com.woodymats.openauth.repositories.LoginRepository
 import com.woodymats.openauth.utils.ApiCallStatus
-import kotlinx.coroutines.delay
+import com.woodymats.openauth.utils.hasInternetConnection
 import kotlinx.coroutines.launch
-import java.io.IOException
+import retrofit2.HttpException
 
-class LoginViewModel(app: Application) : AndroidViewModel(app) {
+class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val user: LoginEntity = LoginEntity("", "")
 
@@ -39,6 +39,11 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     val showLoading: LiveData<Boolean>
         get() = _showLoading
 
+    private val _goToSignUp: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    val goToSignUp: LiveData<Boolean>
+        get() = _goToSignUp
+
     //create function to set Email after user finish enter text
     val emailTextWatcher: TextWatcher
         get() = object : TextWatcher {
@@ -53,7 +58,10 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
 
-    var errorMessage = ""
+    private var _errorMessage: MutableLiveData<String> = MutableLiveData("")
+
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
 
     //create function to set Password after user finish enter text
     val passwordTextWatcher: TextWatcher
@@ -71,25 +79,57 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
 
     //create function to process Login Button clicked
     fun onLoginClicked(v: View) {
-        _callStatus.value = ApiCallStatus.LOADING
-        if (user.isDataValid() == -1) {
-            userLogin(user)
+        when(user.isDataValid()) {
+            -1 -> {
+                _errorMessage.value = ""
+                userLogin(user)
+            }
+            0 -> _errorMessage.value = app.getString(R.string.password_empty)
+            1 -> _errorMessage.value = app.getString(R.string.email_empty)
+            2 -> _errorMessage.value = app.getString(R.string.email_invalid)
+
         }
+    }
+
+    fun onSignUpClicked(v: View) {
+        _goToSignUp.value = true
+    }
+
+    private fun showLoader() {
+        _showLoading.value = true
+    }
+
+    private fun hideLoader() {
+        _showLoading.value = false
     }
 
     private fun userLogin(loginEntity: LoginEntity) {
         viewModelScope.launch {
             _callStatus.value = ApiCallStatus.LOADING
-            _showLoading.value = true
+            showLoader()
             try {
-                delay(2000)
-                repository.loginUser(loginEntity)
-                _showLoading.value = false
-            } catch (e: IOException) {
-                Log.d("Hii", e.stackTraceToString())
-                _callStatus.value = ApiCallStatus.ERROR
-                _showLoading.value = false
+                if (hasInternetConnection(app)) {
+                    repository.loginUser(loginEntity)
+                    _callStatus.value = ApiCallStatus.SUCCESS
+                } else {
+                    _callStatus.value = ApiCallStatus.NOINTERNETERROR
+                }
+                hideLoader()
+            } catch (e: HttpException) {
+                when (e.code()) {
+                    403 -> _callStatus.value = ApiCallStatus.AUTHERROR
+                    404 -> _callStatus.value = ApiCallStatus.SERVERERROR
+                    else -> _callStatus.value = ApiCallStatus.UNKNOWNERROR
+                }
+                hideLoader()
             }
         }
+    }
+
+    fun onSignUpNavigateFinish() {
+        _goToSignUp.value = false
+        _showLoading.value = false
+        _callStatus.value = ApiCallStatus.LOADING
+        _errorMessage.value = ""
     }
 }

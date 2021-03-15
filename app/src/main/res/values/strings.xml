@@ -14,8 +14,18 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
+    <string name="have_not_account">Don\'t have an account? <u><b>Sign up</b></u> </string>
     <string name="email_empty">Email field is empty!</string>
     <string name="password_empty">Password field is empty!</string>
     <string name="email_invalid">Please enter a valid email</string>
+    <string name="unknown_error">An unknown error has occurred</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="wrong_credentials">"Wrong email or password "</string>
+    <string name="server_error">Server error. Please try again later</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="fill_all_fields">Please fill all fields</string>
+    <string name="set_bigger_password">Password must contain at least 6 characters</string>
 
 </resources>
