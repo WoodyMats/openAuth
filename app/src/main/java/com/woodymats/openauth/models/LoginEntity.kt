@@ -6,13 +6,18 @@ import androidx.databinding.BaseObservable
 
 data class LoginEntity(private var email: String, private  var password: String): BaseObservable() {
 
-    fun isDataValid(): Int {
+    fun isEmailValid(): Int {
+        return if (TextUtils.isEmpty(email))
+            0
+        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            1
+        else
+            -1
+    }
+
+    fun isPasswordValid(): Int {
         return if (TextUtils.isEmpty(password))
             0
-        else if (TextUtils.isEmpty(email))
-            1
-        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            2
         else
             -1
     }

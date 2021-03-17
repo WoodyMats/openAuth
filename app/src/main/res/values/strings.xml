@@ -15,8 +15,8 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
     <string name="have_not_account">Don\'t have an account? <u><b>Sign up</b></u> </string>
-    <string name="email_empty">Email field is empty!</string>
-    <string name="password_empty">Password field is empty!</string>
+    <string name="email_empty">Email field is empty</string>
+    <string name="password_empty">Password field is empty</string>
     <string name="email_invalid">Please enter a valid email</string>
     <string name="unknown_error">An unknown error has occurred</string>
     <string name="no_internet_connection">No internet connection</string>
@@ -27,5 +27,8 @@
     <string name="sign_up">Sign Up</string>
     <string name="fill_all_fields">Please fill all fields</string>
     <string name="set_bigger_password">Password must contain at least 6 characters</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="date_format">mm/dd/yy</string>
 
 </resources>

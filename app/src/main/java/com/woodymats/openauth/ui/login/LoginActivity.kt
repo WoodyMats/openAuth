@@ -34,15 +34,31 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.errorMessage.observe(this, {
-            if (!it.isNullOrEmpty()) {
-                Snackbar.make(
-                    binding.root,
-                    it,
-                    Snackbar.LENGTH_LONG
-                ).show()
+        viewModel.emailErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.emailEditTextLayout.error = null
+            } else {
+                binding.emailEditTextLayout.error = it
             }
         })
+
+        viewModel.passwordErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.passwordEditTextLayout.error = null
+            } else {
+                binding.passwordEditTextLayout.error = it
+            }
+        })
+
+        // viewModel.errorMessage.observe(this, {
+        //     if (!it.isNullOrEmpty()) {
+        //         Snackbar.make(
+        //             binding.root,
+        //             it,
+        //             Snackbar.LENGTH_LONG
+        //         ).show()
+        //     }
+        // })
 
         viewModel.callStatus.observe(this, {
             when (it) {

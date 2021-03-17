@@ -58,10 +58,15 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
             }
         }
 
-    private var _errorMessage: MutableLiveData<String> = MutableLiveData("")
+    private var _emailErrorMessage: MutableLiveData<String> = MutableLiveData(null)
 
-    val errorMessage: LiveData<String>
-        get() = _errorMessage
+    val emailErrorMessage: LiveData<String>
+        get() = _emailErrorMessage
+
+    private var _passwordErrorMessage: MutableLiveData<String> = MutableLiveData("")
+
+    val passwordErrorMessage: LiveData<String>
+        get() = _passwordErrorMessage
 
     //create function to set Password after user finish enter text
     val passwordTextWatcher: TextWatcher
@@ -77,17 +82,37 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
             }
         }
 
+    val emailFocusChangeListener: View.OnFocusChangeListener
+        get() = View.OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                when (user.isEmailValid()) {
+                    0 -> _emailErrorMessage.value = app.getString(R.string.email_empty)
+                    1 -> _emailErrorMessage.value = app.getString(R.string.email_invalid)
+                    else -> _emailErrorMessage.value = null
+                }
+            }
+        }
+
+    val passwordFocusChangeListener: View.OnFocusChangeListener
+        get() = View.OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if (user.isPasswordValid() == 0) {
+                    _passwordErrorMessage.value = app.getString(R.string.password_empty)
+                } else {
+                    _passwordErrorMessage.value = null
+                }
+            }
+        }
+
     //create function to process Login Button clicked
     fun onLoginClicked(v: View) {
-        when(user.isDataValid()) {
-            -1 -> {
-                _errorMessage.value = ""
-                userLogin(user)
-            }
-            0 -> _errorMessage.value = app.getString(R.string.password_empty)
-            1 -> _errorMessage.value = app.getString(R.string.email_empty)
-            2 -> _errorMessage.value = app.getString(R.string.email_invalid)
-
+        if ((user.isEmailValid() == -1) && (user.isPasswordValid() == -1)) {
+            _emailErrorMessage.value = null
+            _passwordErrorMessage.value = null
+            userLogin(user)
+        } else {
+            _emailErrorMessage.value = app.getString(R.string.fill_all_fields)
+            _passwordErrorMessage.value = app.getString(R.string.fill_all_fields)
         }
     }
 
@@ -130,6 +155,7 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
         _goToSignUp.value = false
         _showLoading.value = false
         _callStatus.value = ApiCallStatus.LOADING
-        _errorMessage.value = ""
+        _passwordErrorMessage.value = null
+        _passwordErrorMessage.value = null
     }
 }
