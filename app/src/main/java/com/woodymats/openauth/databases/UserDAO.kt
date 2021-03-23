@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull
 interface UserDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)
+    suspend fun insertUser(user: User)
 
     @Update
     suspend fun updateUser(user: User)

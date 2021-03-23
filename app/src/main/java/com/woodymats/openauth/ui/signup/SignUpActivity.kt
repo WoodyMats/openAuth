@@ -1,13 +1,11 @@
 package com.woodymats.openauth.ui.signup
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
-import com.woodymats.openauth.MainActivity
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.ActivitySignUpBinding
 import com.woodymats.openauth.utils.ApiCallStatus
@@ -48,13 +46,51 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setUpObservers() {
-        viewModel.errorMessage.observe(this, {
-            if (!it.isNullOrEmpty()) {
-                Snackbar.make(
-                    binding.root,
-                    it,
-                    Snackbar.LENGTH_LONG
-                ).show()
+        viewModel.firstNameErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.fistNameEditTextLayout.error = null
+            } else {
+                binding.fistNameEditTextLayout.error = it
+            }
+        })
+
+        viewModel.lastNameErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.lastNameEditTextLayout.error = null
+            } else {
+                binding.lastNameEditTextLayout.error = it
+            }
+        })
+
+        viewModel.emailErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.emailEditTextLayout.error = null
+            } else {
+                binding.emailEditTextLayout.error = it
+            }
+        })
+
+        viewModel.passwordErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.passwordEditTextLayout.error = null
+            } else {
+                binding.passwordEditTextLayout.error = it
+            }
+        })
+
+        viewModel.confirmPasswordErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.confirmPasswordEditTextLayout.error = null
+            } else {
+                binding.confirmPasswordEditTextLayout.error = it
+            }
+        })
+
+        viewModel.dateOfBirthErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.dateOfBirthEditTextLayout.error = null
+            } else {
+                binding.dateOfBirthEditTextLayout.error = it
             }
         })
 
@@ -72,9 +108,9 @@ class SignUpActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).show()
 
-                ApiCallStatus.AUTHERROR -> Snackbar.make(
+                ApiCallStatus.USEREXISTS -> Snackbar.make(
                     binding.root,
-                    R.string.wrong_credentials,
+                    R.string.user_exists,
                     Snackbar.LENGTH_LONG
                 ).show()
 
@@ -85,11 +121,6 @@ class SignUpActivity : AppCompatActivity() {
                 ).show()
 
                 ApiCallStatus.SUCCESS -> {
-                    startActivity(
-                        Intent(this@SignUpActivity, MainActivity::class.java)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    )
                     finish()
                 }
                 else -> { //Nothing to do!
@@ -118,10 +149,9 @@ class SignUpActivity : AppCompatActivity() {
             ).build()
         )
         val picker = calendar.build()
-        picker.addOnPositiveButtonClickListener {
-            val date = Date(it)
+        picker.addOnPositiveButtonClickListener { dateLong ->
             val dateFormat = SimpleDateFormat("MM/dd/yy", Locale.getDefault())
-            val dateString = dateFormat.format(date)
+            val dateString = dateFormat.format(Date(dateLong))
             binding.dateOfBirthEditText.setText(dateString)
         }
         picker.show(supportFragmentManager, "DATE_PICKER")

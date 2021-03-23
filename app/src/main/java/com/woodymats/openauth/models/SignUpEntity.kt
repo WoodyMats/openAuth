@@ -9,21 +9,48 @@ data class SignUpEntity(
     private var lastName: String,
     private var email: String,
     private var password: String,
-    private var dateOfBirth: String
+    private var dateOfBirth: Long = -1,
+    private var canCreateCourses: Int = 0
 ) : BaseObservable() {
 
-    fun isDataValid(confirmPassword: String): Int {
-        return if (TextUtils.isEmpty(password) || TextUtils.isEmpty(email) || TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName)
-            || TextUtils.isEmpty(confirmPassword))
+    fun isFirstNameValid(): Int {
+        return if (TextUtils.isEmpty(firstName)) 0 else -1
+    }
+
+    fun isLastNameValid(): Int {
+        return if (TextUtils.isEmpty(lastName)) 0 else -1
+    }
+
+    fun isEmailValid(): Int {
+        return if (TextUtils.isEmpty(email)) {
             0
-        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             1
-        else if (password.length < 6)
-            2
-        else if (confirmPassword != password)
-            3
-        else
+        } else {
             -1
+        }
+    }
+
+    fun isPasswordValid(): Int {
+        return when {
+            TextUtils.isEmpty(password) -> 0
+            password.length < 6 -> 1
+            else -> -1
+        }
+    }
+
+    fun isConfirmPasswordValid(confirmPassword: String): Int {
+        return when {
+            TextUtils.isEmpty(confirmPassword) -> 0
+            password.length < 6 -> 1
+            confirmPassword != password -> 2
+            else -> -1
+        }
+    }
+
+    fun isDataValid(confirmPasswordText: String): Boolean {
+        return isFirstNameValid() == -1 && isLastNameValid() == -1 && isPasswordValid() == -1 && isConfirmPasswordValid(confirmPasswordText) == -1
+            && confirmPasswordText == password && dateOfBirth != -1L
     }
 
     fun setFirstName(firstName: String) {
@@ -40,5 +67,9 @@ data class SignUpEntity(
 
     fun setPassword(password: String) {
         this.password = password
+    }
+
+    fun setDateOfBirth(dateOfBirth: Long) {
+        this.dateOfBirth = dateOfBirth
     }
 }

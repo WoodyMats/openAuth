@@ -83,7 +83,7 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
         }
 
     val emailFocusChangeListener: View.OnFocusChangeListener
-        get() = View.OnFocusChangeListener { v, hasFocus ->
+        get() = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 when (user.isEmailValid()) {
                     0 -> _emailErrorMessage.value = app.getString(R.string.email_empty)
@@ -94,7 +94,7 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
         }
 
     val passwordFocusChangeListener: View.OnFocusChangeListener
-        get() = View.OnFocusChangeListener { v, hasFocus ->
+        get() = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 if (user.isPasswordValid() == 0) {
                     _passwordErrorMessage.value = app.getString(R.string.password_empty)
@@ -142,6 +142,7 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
                 hideLoader()
             } catch (e: HttpException) {
                 when (e.code()) {
+                    401 -> _callStatus.value = ApiCallStatus.AUTHERROR
                     403 -> _callStatus.value = ApiCallStatus.AUTHERROR
                     404 -> _callStatus.value = ApiCallStatus.SERVERERROR
                     else -> _callStatus.value = ApiCallStatus.UNKNOWNERROR

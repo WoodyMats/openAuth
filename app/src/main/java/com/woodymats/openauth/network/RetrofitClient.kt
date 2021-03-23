@@ -7,18 +7,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    // TODO(Set the right url when it's ready)
-    final val BASE_URL: String = "https://www.google.gr/"
+    private const val BASE_URL: String = "http://188.166.96.110/api/"
 
     private val gson = GsonBuilder()
         .create()
 
-    val retrofitClient: Retrofit.Builder by lazy {
-        val okhttpClient = OkHttpClient.Builder()
+    private val retrofitClient: Retrofit.Builder by lazy {
+        val okHttpClient = OkHttpClient.Builder()
+
+        // TODO(Add custom interceptor)
+        //okHttpClient.addInterceptor()
 
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okhttpClient.build())
+            .client(okHttpClient.build())
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
 

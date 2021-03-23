@@ -3,14 +3,15 @@ package com.woodymats.openauth.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "user_table")
 data class User(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
 
-    @ColumnInfo(name = "name")
-    var name: String = "",
+    @ColumnInfo(name = "firstName")
+    var firstName: String = "",
 
     @ColumnInfo(name = "lastName")
     var lastName: String = "",
@@ -19,5 +20,12 @@ data class User(
     var profileImage: String = "",
 
     @ColumnInfo(name = "email")
-    var email: String = ""
+    var email: String = "",
+
+    @ColumnInfo(name = "token")
+    @SerializedName("remember_token")
+    var token: String = "",
+
+    @ColumnInfo(name = "canCreateCourses")
+    var canCreateCourses: Int = 0
 )

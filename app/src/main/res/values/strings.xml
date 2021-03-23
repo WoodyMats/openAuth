@@ -27,8 +27,11 @@
     <string name="sign_up">Sign Up</string>
     <string name="fill_all_fields">Please fill all fields</string>
     <string name="set_bigger_password">Password must contain at least 6 characters</string>
+    <string name="passwords_do_not_match">Passwords are not the same</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="date_of_birth">Date Of Birth</string>
     <string name="date_format">mm/dd/yy</string>
+    <string name="field_required">This field is required</string>
+    <string name="user_exists">A user with this email already exists</string>
 
 </resources>
