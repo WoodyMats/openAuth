@@ -1,6 +1,7 @@
 package com.woodymats.openauth.ui.login
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -18,7 +19,7 @@ import com.woodymats.openauth.utils.hasInternetConnection
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
+class LoginViewModel(private val app: Application, val preferences: SharedPreferences) : AndroidViewModel(app) {
 
     private val user: LoginEntity = LoginEntity("", "")
 
@@ -134,7 +135,7 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
             showLoader()
             try {
                 if (hasInternetConnection(app)) {
-                    repository.loginUser(loginEntity)
+                    repository.loginUser(loginEntity, preferences)
                     _callStatus.value = ApiCallStatus.SUCCESS
                 } else {
                     _callStatus.value = ApiCallStatus.NOINTERNETERROR

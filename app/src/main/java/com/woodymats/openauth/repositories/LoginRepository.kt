@@ -1,13 +1,19 @@
 package com.woodymats.openauth.repositories
 
+import android.content.SharedPreferences
 import com.woodymats.openauth.databases.AppDatabase
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.network.RetrofitClient
+import com.woodymats.openauth.utils.IS_USER_LOGGED_IN
+import com.woodymats.openauth.utils.USER_TOKEN
 
 class LoginRepository(private val database: AppDatabase) {
 
-    suspend fun loginUser(loginEntity: LoginEntity) {
+    suspend fun loginUser(loginEntity: LoginEntity, preferences: SharedPreferences) {
+        // val courses = RetrofitClient.apiInterface.getAllCourses("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZGYyMDk3NjFhNGYyODZiM2VmZTM5ZGNiN2Y2ZjRmMjVjNTI0NjIwODFlODkwNzQwMmRjYzQ5MDAyOTM0OWFmMzFhYTRhYTFjODQ3OTk3NDgiLCJpYXQiOjE2MTc5Njc3OTYuNjAwNzA2LCJuYmYiOjE2MTc5Njc3OTYuNjAwNzE1LCJleHAiOjE2MTc5ODkzOTYuNTE3MzcyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.TqbDWtaq0LXLin5GLDVFRUbO7L8j5o3uD5gmiTHrzxVs4xqrRHtWYGhUIatVjyB31dq6ptTz3NVIAdSGqWxArWk0lSRZy2MsL0FDqbIggeSxzqazZYRNP-ahFCqPCvtO-B6SMeAU69cIH_O6Xr4Dj7itNXkgTPLl9HyLj6Q4PDDhQVYRIo19pYl6ULc-9OcB5gPcr8UP3jhqVa8lMWoyU7czL3NBSr_MXMMqdAKGYHeSiTezrHC9GO8qfMIjNaKHu2tDCLkOvS1tILUB3S37qkKas4Sq3GlOJhulEs_6dilbG55N9737v1MvgmwmDwUAIxDKOzXROIttZvyEzwCV0rcr-F4YlAOistMcWKi1lKhXWTy_k_Ou5P-2iBNlND4J6vHHhMkpicEztlqlc-JBQ6JQVg6F_HnR0lNeXvWNPqYbmXeDtqrTd2L8Z1zM-S4fCaYICzwUNPs_nLNZvZP9PP_fhxo_dQ53qK4CzWrRIIY7WrK78UjijQW3NpXS9xM1LV6YJfE6CQNViGsuDn24IxCRyXEZto0MbrylDBxfKPAgiJd167CaR849l_Y9OQYDX5s37I5pB6nkW7iWXFggliF0Ap4-bzdW3qKV7LHIU73fLM0BIzZP3DATir4txfiTiWWvY8QTAFCPTTrt-4G5EfehGOmNRwc3P72f2inQovs")
+        // database.courseDAO.insertCourses(courses)
         val userFromNetwork = RetrofitClient.apiInterface.loginUser(loginEntity)
         database.userDAO.insertUser(userFromNetwork)
+        preferences.edit().putBoolean(IS_USER_LOGGED_IN, true).putString(USER_TOKEN, userFromNetwork.token).apply()
     }
 }

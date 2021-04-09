@@ -10,6 +10,7 @@ import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.ActivityLoginBinding
 import com.woodymats.openauth.ui.signup.SignUpActivity
 import com.woodymats.openauth.utils.ApiCallStatus
+import com.woodymats.openauth.utils.PREFERENCES
 
 class LoginActivity : AppCompatActivity() {
 
@@ -101,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
     private fun setUpViewModel() {
         binding.lifecycleOwner = this
         val application = requireNotNull(this).application
-        val viewModelFactory = LoginViewModelFactory(application)
+        val viewModelFactory = LoginViewModelFactory(application, getSharedPreferences(PREFERENCES, MODE_PRIVATE))
         binding.viewModel =
             ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
         // binding.executePendingBindings()

@@ -3,7 +3,6 @@ package com.woodymats.openauth.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "user_table")
 data class User(
@@ -23,7 +22,6 @@ data class User(
     var email: String = "",
 
     @ColumnInfo(name = "token")
-    @SerializedName("remember_token")
     var token: String = "",
 
     @ColumnInfo(name = "canCreateCourses")

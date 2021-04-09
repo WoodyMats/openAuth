@@ -10,7 +10,6 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="token">USER_TOKEN</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_in">Sign in</string>
@@ -33,5 +32,6 @@
     <string name="date_format">mm/dd/yy</string>
     <string name="field_required">This field is required</string>
     <string name="user_exists">A user with this email already exists</string>
+    <string name="logout">Logout</string>
 
 </resources>
