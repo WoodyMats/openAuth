@@ -4,9 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.woodymats.openauth.ui.signup.SignUpViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <ScrollView

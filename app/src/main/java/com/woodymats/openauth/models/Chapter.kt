@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "chapters_table")
 data class Chapter(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     @SerializedName("chapter_id")
     var chapterId: Long = 0L,
 

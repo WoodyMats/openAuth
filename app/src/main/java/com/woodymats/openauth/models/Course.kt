@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "courses_table")
 data class Course(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     var id: Long = 0L,
 
     @ColumnInfo(name = "courseTitle")
@@ -21,7 +21,8 @@ data class Course(
     @ColumnInfo(name = "author")
     var author: String = "",
 
-    @ColumnInfo(name = "chapters")
-    var chapters: List<Chapter>
+    // @ColumnInfo(name = "chapters")
+    // @Relation(parentColumn = "id", entityColumn = "course_id", entity = Chapter::class)
+    // var chapters: List<Chapter>
 
 )
