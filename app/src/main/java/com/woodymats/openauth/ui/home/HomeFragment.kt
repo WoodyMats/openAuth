@@ -1,31 +1,62 @@
 package com.woodymats.openauth.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.woodymats.openauth.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.woodymats.openauth.adapters.AllCoursesAdapter
+import com.woodymats.openauth.adapters.MyCoursesAdapter
+import com.woodymats.openauth.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
-
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+    private val viewModel: HomeFragmentViewModel by lazy {
+        ViewModelProvider(this).get(HomeFragmentViewModel::class.java)
     }
+    private lateinit var binding: FragmentHomeBinding
+    private var fragmentContext: Context? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentHomeBinding.inflate(layoutInflater)
+        setUpViewModel()
+        setUpRecyclerViews()
+        return binding.root
+    }
+
+    private fun setUpRecyclerViews() {
+        binding.myCoursesRecycler.also {
+            it.layoutManager = LinearLayoutManager(fragmentContext, LinearLayoutManager.HORIZONTAL, false)
+            it.adapter = MyCoursesAdapter()
+        }
+        binding.allCoursesRecycler.also {
+            it.layoutManager = LinearLayoutManager(fragmentContext, LinearLayoutManager.HORIZONTAL, false)
+            it.adapter = AllCoursesAdapter()
+        }
+        // viewModel.getUserEnrollments()
+        // viewModel.enrollments.observe(viewLifecycleOwner, { enrollments ->
+        //     binding.myCoursesRecycler.also {
+        //         it.layoutManager = LinearLayoutManager(fragmentContext, LinearLayoutManager.HORIZONTAL, false)
+        //         it.adapter = MyCoursesAdapter()
+        //     }
+        // })
+    }
+
+    private fun setUpViewModel() {
+        binding.lifecycleOwner = this
+        val application = requireActivity().application
+        val viewModelFactory = HomeFragmentViewModelFactory(application)
+        binding.viewModel =
+            ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+        // binding.executePendingBindings()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fragmentContext = context
+    }
+
 }

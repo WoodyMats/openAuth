@@ -7,29 +7,40 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.woodymats.openauth.models.Chapter
 import com.woodymats.openauth.models.Course
+import com.woodymats.openauth.models.CourseEntity
 import com.woodymats.openauth.models.Enrollment
 
 @Dao
 interface CourseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCourses(courses: List<Course>)
+    suspend fun insertCourseEntities(courses: List<CourseEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCourse(course: Course)
+    suspend fun insertCourseEntity(course: CourseEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertChapters(chapters: List<Chapter>)
 
     suspend fun insertEnrollment(enrollment: Enrollment) {
-        insertCourse(enrollment.course)
+        insertCourseEntity(enrollment.course)
         insertChapters(enrollment.chapters)
+    }
+
+    suspend fun insertCourse(course: Course) {
+        insertCourseEntity(course.course)
+        insertChapters(course.chapters)
     }
 
     // @Delete
     // suspend fun deleteCourse(course: Course)
 
     @Transaction
+    @Query("SELECT * FROM courses_table WHERE user_id == :id")
+    suspend fun getUserEnrollments(id: Long): List<Enrollment>
+
+    @Transaction
     @Query("SELECT * FROM courses_table")
-    suspend fun getUserEnrollments(): List<Enrollment>
+    suspend fun getAllCourses(): List<Course>
+
 }

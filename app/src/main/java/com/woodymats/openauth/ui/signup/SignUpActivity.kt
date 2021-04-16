@@ -17,7 +17,7 @@ import java.util.Locale
 
 class SignUpActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivitySignUpBinding
+    private lateinit var binding: ActivitySignUpBinding
     private val viewModel: SignUpViewModel by lazy {
         ViewModelProvider(this).get(SignUpViewModel::class.java)
     }

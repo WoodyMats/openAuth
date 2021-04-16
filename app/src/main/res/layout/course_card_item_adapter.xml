@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="course"
+            type="com.woodymats.openauth.models.CourseEntity" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="250dp"
+        android:layout_height="280dp"
+        app:strokeWidth="1dp"
+        android:layout_marginEnd="8dp"
+        app:strokeColor="@color/colorPrimary"
+        app:cardCornerRadius="12dp"
+        android:elevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/courseCardImage"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_logout"
+                imageUrl="@{course.courseImage}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/courseTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{course.title}"
+                app:layout_constraintTop_toBottomOf="@+id/courseCardImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/courseDescription"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:maxLines="3"
+                android:text="@{course.description}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                app:layout_constraintTop_toBottomOf="@id/courseTitleTextView"
+                app:layout_constraintStart_toStartOf="@+id/courseTitleTextView"
+                app:layout_constraintEnd_toEndOf="@+id/courseTitleTextView"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -19,7 +19,7 @@ import com.woodymats.openauth.utils.hasInternetConnection
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class LoginViewModel(private val app: Application, val preferences: SharedPreferences) : AndroidViewModel(app) {
+class LoginViewModel(private val app: Application, private val preferences: SharedPreferences) : AndroidViewModel(app) {
 
     private val user: LoginEntity = LoginEntity("", "")
 

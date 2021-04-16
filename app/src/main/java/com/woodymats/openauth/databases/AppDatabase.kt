@@ -6,10 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.woodymats.openauth.models.Chapter
-import com.woodymats.openauth.models.Course
+import com.woodymats.openauth.models.CourseEntity
 import com.woodymats.openauth.models.User
 
-@Database(entities = [User::class, Course::class, Chapter::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, CourseEntity::class, Chapter::class], version = 1, exportSchema = false)
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract val userDAO: UserDAO

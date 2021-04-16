@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class Enrollment(
-    @Embedded var course: Course,
+    @Embedded var course: CourseEntity,
     @Relation(
         parentColumn = "id",
         entityColumn = "course_id"
