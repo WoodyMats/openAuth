@@ -50,16 +50,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="?attr/textAppearanceHeadline5"
                     android:text="@string/my_courses_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    app:drawableTint="@color/colorPrimary" />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/myCoursesRecycler"
@@ -89,16 +86,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="?attr/textAppearanceHeadline5"
                     android:text="@string/all_courses_title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:drawableEndCompat="@drawable/arrow_forward"
-                    app:drawableTint="@color/colorPrimary" />
+                    app:drawableEndCompat="@drawable/arrow_forward" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/allCoursesRecycler"

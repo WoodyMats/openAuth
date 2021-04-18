@@ -10,21 +10,24 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="250dp"
-        android:layout_height="280dp"
+        android:layout_height="250dp"
         app:strokeWidth="1dp"
         android:layout_marginEnd="8dp"
-        app:strokeColor="@color/colorPrimary"
-        app:cardCornerRadius="12dp"
+        android:layout_marginBottom="8dp"
         android:elevation="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp">
 
             <ImageView
                 android:id="@+id/courseCardImage"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ic_logout"
                 imageUrl="@{course.courseImage}"
@@ -36,11 +39,12 @@
                 android:id="@+id/courseTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:textSize="22sp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:text="@{course.title}"
                 app:layout_constraintTop_toBottomOf="@+id/courseCardImage"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,10 +56,9 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:maxLines="3"
+                android:maxLines="2"
                 android:text="@{course.description}"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
+                android:textAppearance="?attr/textAppearanceBody2"
                 android:ellipsize="end"
                 app:layout_constraintTop_toBottomOf="@id/courseTitleTextView"
                 app:layout_constraintStart_toStartOf="@+id/courseTitleTextView"
