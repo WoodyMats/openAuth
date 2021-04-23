@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.woodymats.openauth.R
 import com.woodymats.openauth.models.SignUpEntity
-import com.woodymats.openauth.repositories.SignUpRepository
+import com.woodymats.openauth.repositories.UserRepository
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.hasInternetConnection
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import java.util.Locale
 class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private var user: SignUpEntity = SignUpEntity("", "", "", "")
-    private val repository: SignUpRepository = SignUpRepository()
+    private val repository: UserRepository = UserRepository()
     private var confirmPasswordText: String = ""
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()
 

@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.CourseCardItemAdapterBinding
 import com.woodymats.openauth.models.Course
+import com.woodymats.openauth.ui.home.CourseRecyclerViewClickListener
 
-class AllCoursesAdapter: ListAdapter<Course, AllCoursesAdapter.AllCoursesViewHolder>(AllCoursesDiffCallback()) {
+class AllCoursesAdapter(private val listener: CourseRecyclerViewClickListener): ListAdapter<Course, AllCoursesAdapter.AllCoursesViewHolder>(AllCoursesDiffCallback()) {
 
     // override fun getItemCount() = enrollments.size
 
@@ -25,6 +26,7 @@ class AllCoursesAdapter: ListAdapter<Course, AllCoursesAdapter.AllCoursesViewHol
 
     override fun onBindViewHolder(holder: AllCoursesViewHolder, position: Int) {
         holder.adapterCourseCardItemAdapterBinding.course = getItem(position).course
+        holder.adapterCourseCardItemAdapterBinding.root.setOnClickListener { listener.onCourseItemClicked(it, getItem(position).course) }
         holder.adapterCourseCardItemAdapterBinding.executePendingBindings()
     }
 

@@ -7,8 +7,7 @@ data class CourseNetworkEntity(
     val title: String = "",
     val description: String = "",
     val courseImage: String = "",
-    @SerializedName("user_id")
-    val userId: Long,
+    @SerializedName("user_id") val userId: Long,
     val author: String = "",
     val chapters: List<ChapterNetworkEntity>
 )

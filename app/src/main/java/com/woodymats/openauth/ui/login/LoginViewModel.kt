@@ -13,7 +13,7 @@ import com.woodymats.openauth.R
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.User
-import com.woodymats.openauth.repositories.LoginRepository
+import com.woodymats.openauth.repositories.UserRepository
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.hasInternetConnection
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class LoginViewModel(private val app: Application, private val preferences: Shar
 
     private val user: LoginEntity = LoginEntity("", "")
 
-    private val repository = LoginRepository(getInstance(app))
+    private val repository = UserRepository(getInstance(app))
 
     private var _dataState: MutableLiveData<User> = MutableLiveData()
 

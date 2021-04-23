@@ -1,50 +1,111 @@
 package com.woodymats.openauth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.snackbar.Snackbar
+import com.woodymats.openauth.databases.getInstance
+import com.woodymats.openauth.databinding.ActivityMainBinding
+import com.woodymats.openauth.ui.login.LoginActivity
+import com.woodymats.openauth.utils.ApiCallStatus
+import com.woodymats.openauth.utils.PREFERENCES
+import com.woodymats.openauth.utils.USER_TOKEN
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setUpViewModel()
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .show()
-        }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navView
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_logout
+                R.id.nav_home, R.id.nav_slideshow, R.id.nav_logout
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when(destination.id) {
+                R.id.courseDetailsFragment -> {
+                    toolbar.visibility = GONE
+                }
+                else -> toolbar.visibility = VISIBLE
+            }
+        }
+        setUpObservers()
+    }
+
+    private fun setUpViewModel() {
+        val preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        viewModel = MainActivityViewModel(preferences.getString(USER_TOKEN, "")!!, getInstance(baseContext), preferences)
+    }
+
+    private fun setUpObservers() {
+        viewModel.callStatus.observe(this, {
+            when (it) {
+                ApiCallStatus.UNKNOWNERROR -> Snackbar.make(
+                    binding.root,
+                    R.string.unknown_error,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                ApiCallStatus.NOINTERNETERROR -> Snackbar.make(
+                    binding.root,
+                    R.string.no_internet_connection,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                ApiCallStatus.AUTHERROR -> Snackbar.make(
+                    binding.root,
+                    R.string.wrong_credentials,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                ApiCallStatus.SERVERERROR -> Snackbar.make(
+                    binding.root,
+                    R.string.server_error,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                ApiCallStatus.SUCCESS -> {
+                    startActivity(
+                        Intent(this@MainActivity, LoginActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    )
+                    finish()
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,7 +115,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.fragment)
+        val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    fun logout(item: MenuItem) {
+        viewModel.logoutUser()
     }
 }

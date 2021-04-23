@@ -43,4 +43,6 @@ interface CourseDAO {
     @Query("SELECT * FROM courses_table")
     suspend fun getAllCourses(): List<Course>
 
+    @Query("SELECT * FROM courses_table WHERE id == :emailId")
+    suspend fun getCourseById(emailId: Long): CourseEntity
 }

@@ -9,13 +9,22 @@
         android:id="@+id/nav_home"
         android:name="com.woodymats.openauth.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_courseDetailsFragment"
+            app:destination="@id/courseDetailsFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.woodymats.openauth.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/courseDetailsFragment"
+        android:name="com.woodymats.openauth.ui.courseDetails.CourseDetailsFragment"
+        android:label="fragment_course_details"
+        tools:layout="@layout/fragment_course_details" >
+        <argument
+            android:name="emailId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"

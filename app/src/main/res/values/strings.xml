@@ -36,5 +36,6 @@
     <string name="my_courses_title">My Courses</string>
     <string name="all_courses_title">All Courses</string>
     <string name="search_course">Search course</string>
+    <string name="course_details_transition_name">course_detail_transition</string>
 
 </resources>

@@ -9,13 +9,13 @@ import com.woodymats.openauth.models.CourseNetworkEntity
 import com.woodymats.openauth.models.Enrollment
 import com.woodymats.openauth.network.RetrofitClient
 
-class HomeRepository(private val database: AppDatabase) {
+class CoursesRepository(private val database: AppDatabase) {
 
     suspend fun getUserEnrollmentsFromServer(userToken: String?, userId: Long): List<Enrollment> {
         val enrollments = RetrofitClient.apiInterface.getUserEnrollments(userToken!!)
         for (enrollment in enrollments) {
             val enrollmentDatabase = Enrollment(
-                mapToCourseEntity(enrollment.course),
+                mapToCourseEntity(enrollment.course, userId),
                 mapToChapterListEntity(enrollment.course.chapters)
             )
             database.courseDAO.insertEnrollment(enrollmentDatabase)
@@ -44,6 +44,17 @@ class HomeRepository(private val database: AppDatabase) {
             description = networkEntity.description,
             courseImage = networkEntity.courseImage,
             userId = networkEntity.userId,
+            author = networkEntity.author
+        )
+    }
+
+    private fun mapToCourseEntity(networkEntity: CourseNetworkEntity, userId: Long): CourseEntity {
+        return CourseEntity(
+            id = networkEntity.id,
+            title = networkEntity.title,
+            description = networkEntity.description,
+            courseImage = networkEntity.courseImage,
+            userId = userId,
             author = networkEntity.author
         )
     }

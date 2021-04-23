@@ -21,6 +21,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ProgressBar
+                android:id="@+id/myCoursesLoadingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.showLoadingMyCourses ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@+id/myCoursesLinear"
+                app:layout_constraintTop_toTopOf="@+id/myCoursesLinear"
+                app:layout_constraintEnd_toEndOf="@+id/myCoursesLinear"
+                app:layout_constraintStart_toStartOf="@+id/myCoursesLinear" />
+
+            <ProgressBar
+                android:id="@+id/allCoursesLoadingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.showLoadingAllCourses ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@+id/allCoursesLinear"
+                app:layout_constraintTop_toTopOf="@+id/allCoursesLinear"
+                app:layout_constraintEnd_toEndOf="@+id/allCoursesLinear"
+                app:layout_constraintStart_toStartOf="@+id/allCoursesLinear" />
+
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/coursesSearchBar"
                 android:layout_width="0dp"
@@ -35,51 +55,15 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <LinearLayout
-                android:id="@+id/myCoursesLinear"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                showOnlyWhenEmpty="@{viewModel.enrollments}"
-                app:layout_constraintTop_toBottomOf="@id/coursesSearchBar"
-                app:layout_constraintStart_toStartOf="@+id/coursesSearchBar"
-                app:layout_constraintEnd_toEndOf="@+id/coursesSearchBar">
-
-                <TextView
-                    android:id="@+id/myCoursesTitleTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textAppearance="?attr/textAppearanceHeadline5"
-                    android:text="@string/my_courses_title"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:drawableEndCompat="@drawable/arrow_forward" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/myCoursesRecycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    enrollmentData="@{viewModel.enrollments}"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/allCoursesLinear"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
                 showOnlyWhenEmpty="@{viewModel.courses}"
-                app:layout_constraintTop_toBottomOf="@id/myCoursesLinear"
-                app:layout_constraintStart_toStartOf="@+id/myCoursesLinear"
-                app:layout_constraintEnd_toEndOf="@+id/myCoursesLinear"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/coursesSearchBar"
+                app:layout_constraintStart_toStartOf="@+id/coursesSearchBar"
+                app:layout_constraintEnd_toEndOf="@+id/coursesSearchBar">
 
                 <TextView
                     android:id="@+id/allCoursesTitleTextView"
@@ -98,7 +82,45 @@
                     android:id="@+id/allCoursesRecycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:transitionGroup="true"
                     coursesData="@{viewModel.courses}"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/myCoursesLinear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                showOnlyWhenEmpty="@{viewModel.enrollments}"
+                app:layout_constraintTop_toBottomOf="@id/allCoursesLinear"
+                app:layout_constraintStart_toStartOf="@+id/allCoursesLinear"
+                app:layout_constraintEnd_toEndOf="@+id/allCoursesLinear"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/myCoursesTitleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:text="@string/my_courses_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:drawableEndCompat="@drawable/arrow_forward" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/myCoursesRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:transitionGroup="true"
+                    enrollmentData="@{viewModel.enrollments}"
+                    android:orientation="horizontal"
                     android:layout_marginTop="8dp" />
 
             </LinearLayout>

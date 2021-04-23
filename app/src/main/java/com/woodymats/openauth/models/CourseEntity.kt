@@ -21,7 +21,7 @@ data class CourseEntity(
 
     @ColumnInfo(name = "user_id")
     @SerializedName("user_id")
-    var userId: Long,
+    var userId: Long = -1L,
 
     @ColumnInfo(name = "author")
     var author: String = "",
