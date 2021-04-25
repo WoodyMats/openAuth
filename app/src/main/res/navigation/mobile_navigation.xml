@@ -24,6 +24,10 @@
             android:name="emailId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <argument
+            android:name="courseImage"
+            app:argType="string"
+            android:defaultValue=" " />
     </fragment>
 
     <fragment

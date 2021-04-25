@@ -81,7 +81,7 @@ class HomeFragment : Fragment(), CourseRecyclerViewClickListener {
         }
         val courseCardDetailTransitionName = getString(R.string.course_details_transition_name)
         val extras = FragmentNavigatorExtras(view to courseCardDetailTransitionName)
-        val action = HomeFragmentDirections.actionNavHomeToCourseDetailsFragment(course.id)
+        val action = HomeFragmentDirections.actionNavHomeToCourseDetailsFragment(course.id, course.courseImage)
         findNavController().navigate(action, extras)
     }
 }

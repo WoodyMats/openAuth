@@ -23,6 +23,7 @@ class CourseDetailsFragment : Fragment() {
     private lateinit var binding: FragmentCourseDetailsBinding
     private val args: CourseDetailsFragmentArgs by navArgs()
     private val emailId: Long by lazy(LazyThreadSafetyMode.NONE) { args.emailId }
+    private val courseImage: String by lazy(LazyThreadSafetyMode.NONE) { args.courseImage }
     val job = Job()
     val uiScope = CoroutineScope(Dispatchers.Main + job)
 
@@ -41,7 +42,7 @@ class CourseDetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCourseDetailsBinding.inflate(layoutInflater)
-
+        binding.imageUrl = courseImage
         return binding.root
     }
 
@@ -50,7 +51,8 @@ class CourseDetailsFragment : Fragment() {
         uiScope.launch(Dispatchers.IO){
             val course = getInstance(requireContext()).courseDAO.getCourseById(emailId)
             withContext(Dispatchers.Main){
-                binding.textGallery.text = course.title
+                binding.courseTitle.text = course.title
+                binding.courseDescription.text = course.description
             }
 
         }

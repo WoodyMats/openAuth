@@ -47,16 +47,14 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_slideshow, R.id.nav_logout
-            ), drawerLayout
+            navController.graph, drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when(destination.id) {
+            when (destination.id) {
                 R.id.courseDetailsFragment -> {
-                    toolbar.visibility = GONE
+                    // toolbar.visibility = GONE
                 }
                 else -> toolbar.visibility = VISIBLE
             }
@@ -66,7 +64,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpViewModel() {
         val preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        viewModel = MainActivityViewModel(preferences.getString(USER_TOKEN, "")!!, getInstance(baseContext), preferences)
+        viewModel = MainActivityViewModel(
+            preferences.getString(USER_TOKEN, "")!!,
+            getInstance(baseContext),
+            preferences
+        )
     }
 
     private fun setUpObservers() {
