@@ -22,7 +22,7 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
 
     private val repository = CoursesRepository(getInstance(app))
 
-    private val userToken: String = "Bearer " + app.getSharedPreferences(PREFERENCES, MODE_PRIVATE).getString(USER_TOKEN, "")
+    private val userToken: String = app.getSharedPreferences(PREFERENCES, MODE_PRIVATE).getString(USER_TOKEN, "").toString()
     private val userId: Long = app.getSharedPreferences(PREFERENCES, MODE_PRIVATE).getLong(USER_ID, 0L)
 
     private var _enrollments: MutableLiveData<List<Enrollment>> = MutableLiveData(emptyList())
@@ -34,7 +34,6 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
         get() = _courses
 
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()
-
     val callStatus: LiveData<ApiCallStatus>
         get() = _callStatus
 

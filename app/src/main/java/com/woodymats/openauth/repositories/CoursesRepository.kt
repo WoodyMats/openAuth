@@ -6,6 +6,7 @@ import com.woodymats.openauth.models.ChapterNetworkEntity
 import com.woodymats.openauth.models.Course
 import com.woodymats.openauth.models.CourseEntity
 import com.woodymats.openauth.models.CourseNetworkEntity
+import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.models.Enrollment
 import com.woodymats.openauth.network.RetrofitClient
 
@@ -34,6 +35,12 @@ class CoursesRepository(private val database: AppDatabase) {
         }
         return getAllCoursesFromCache()
     }
+
+    suspend fun enrollToCourse(token: String, enrollToCourseModel: EnrollToCourseModel) {
+        RetrofitClient.apiInterface.enrollToCourse(token, enrollToCourseModel)
+    }
+
+    suspend fun getCourseById(courseId: Long): CourseEntity = database.courseDAO.getCourseById(courseId)
 
     suspend fun getAllCoursesFromCache(): List<Course> = database.courseDAO.getAllCourses()
 

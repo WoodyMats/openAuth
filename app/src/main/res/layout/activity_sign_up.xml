@@ -195,6 +195,7 @@
                 android:layout_marginTop="16dp"
                 android:textAllCaps="true"
                 android:text="@string/sign_up"
+                style="@style/TextAppearance.OpenAuth.Button"
                 android:onClick="@{viewModel::onSignUpClicked}"
                 app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout"
                 app:layout_constraintStart_toStartOf="@+id/passwordEditTextLayout"

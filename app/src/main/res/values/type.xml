@@ -78,7 +78,6 @@
     </style>
 
     <style name="TextAppearance.OpenAuth.Button" parent="TextAppearance.MaterialComponents.Button">
-        <!--Your custom type style here-->
     </style>
 
     <style name="TextAppearance.OpenAuth.Caption" parent="TextAppearance.MaterialComponents.Caption">

@@ -18,7 +18,7 @@
     <!--Top level DayNight theme to be used in AndroidManifest.xml-->
     <style name="Theme.OpenAuth" parent="Base.Theme.OpenAuth">
         <!--Material color attributes (dark theme) -->
-        <item name="colorPrimary">@color/blue_200</item>
+        <item name="colorPrimary">@color/blue_500</item>
         <item name="colorPrimaryVariant">@color/purple_600</item>
         <item name="colorSecondary">@color/yellow_200</item>
         <item name="colorSecondaryVariant">@color/yellow_500</item>
@@ -33,4 +33,8 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
     </style>
+
+    <style name="Theme.OpenAuth.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+
+    <style name="Theme.OpenAuth.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>

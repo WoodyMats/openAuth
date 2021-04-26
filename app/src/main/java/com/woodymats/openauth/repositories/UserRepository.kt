@@ -21,7 +21,7 @@ class UserRepository(private val database: AppDatabase? = null) {
         val userFromNetwork = RetrofitClient.apiInterface.loginUser(loginEntity)
         database!!.userDAO.insertUser(userFromNetwork)
         preferences.edit().putBoolean(IS_USER_LOGGED_IN, true)
-            .putString(USER_TOKEN, userFromNetwork.token).putLong(USER_ID, userFromNetwork.id)
+            .putString(USER_TOKEN, "Bearer " + userFromNetwork.token).putLong(USER_ID, userFromNetwork.id)
             .apply()
     }
 

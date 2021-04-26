@@ -37,5 +37,8 @@
     <string name="all_courses_title">All Courses</string>
     <string name="search_course">Search course</string>
     <string name="course_details_transition_name">course_detail_transition</string>
+    <string name="description_string">Description</string>
+    <string name="enroll_string">Enroll</string>
+    <string name="enrolled_to_course">You enrolled to %1$s</string>
 
 </resources>

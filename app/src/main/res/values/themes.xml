@@ -23,7 +23,7 @@
         <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
         <!--colorSecondary colors are most often used as accents on components, such as FABs and -->
         <!--selection controls.-->
-        <item name="colorPrimary">@color/blue_500</item>
+        <item name="colorPrimary">@color/blue_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorSecondary">@color/yellow_200</item>
         <item name="colorSecondaryVariant">@color/yellow_500</item>
@@ -74,6 +74,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.OpenAuth.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+
+    <style name="Theme.OpenAuth.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 <!--    <style name="Theme.OpenAuth.AppBarOverlay" parent="Theme.OpenAuth" />-->
 
 <!--    <style name="Theme.OpenAuth.PopupOverlay" parent="Theme.OpenAuth" />-->

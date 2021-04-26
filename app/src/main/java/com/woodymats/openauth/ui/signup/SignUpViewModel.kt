@@ -242,15 +242,14 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
                     _callStatus.value = ApiCallStatus.LOADING
                     repository.registerUser(user)
                     _callStatus.value = ApiCallStatus.SUCCESS
-                    hideLoader()
                 } catch (e: HttpException) {
-                    hideLoader()
                     when (e.code()) {
                         403 -> _callStatus.value = ApiCallStatus.USEREXISTS
                         404 -> _callStatus.value = ApiCallStatus.SERVERERROR
                         else -> _callStatus.value = ApiCallStatus.UNKNOWNERROR
                     }
                 }
+                hideLoader()
             } else {
                 _callStatus.value = ApiCallStatus.NOINTERNETERROR
             }

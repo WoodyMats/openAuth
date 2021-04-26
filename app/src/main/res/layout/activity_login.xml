@@ -108,7 +108,7 @@
             android:layout_marginTop="16dp"
             android:padding="8dp"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.OpenAuth.Button"
+            style="@style/TextAppearance.OpenAuth.Button"
             android:text="@string/sign_in"
             android:onClick="@{viewModel::onLoginClicked}"
             app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout"

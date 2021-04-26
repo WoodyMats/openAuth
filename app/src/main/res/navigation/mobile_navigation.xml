@@ -21,7 +21,7 @@
         android:label="fragment_course_details"
         tools:layout="@layout/fragment_course_details" >
         <argument
-            android:name="emailId"
+            android:name="courseId"
             app:argType="long"
             android:defaultValue="-1L" />
         <argument

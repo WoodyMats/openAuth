@@ -2,6 +2,7 @@ package com.woodymats.openauth.network
 
 import com.google.gson.JsonObject
 import com.woodymats.openauth.models.CourseNetworkEntity
+import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.models.EnrollmentNetworkEntity
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.SignUpEntity
@@ -34,5 +35,9 @@ interface ApiCallsInterface {
     @Headers("Content-Type: application/json")
     @GET("getEnrollmentsByUser")
     suspend fun getUserEnrollments(@Header("Authorization") token: String): List<EnrollmentNetworkEntity>
+
+    @Headers("Content-Type: application/json")
+    @POST("enrollToCourse")
+    suspend fun enrollToCourse(@Header("Authorization") token: String, @Body enrollToCourseModel: EnrollToCourseModel)
 
 }
