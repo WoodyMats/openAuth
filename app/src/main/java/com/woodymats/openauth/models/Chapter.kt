@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "chapters_table")
 data class Chapter(
     @PrimaryKey
-    @SerializedName("chapter_id")
     var chapterId: Long = 0L,
 
     @ColumnInfo(name = "chapterTitle")
@@ -21,7 +20,7 @@ data class Chapter(
     var chapterImage: String = "",
 
     @ColumnInfo(name = "order")
-    var order: Int,
+    var order: Int = 0,
 
     @ColumnInfo(name = "course_id")
     @SerializedName("course_id")

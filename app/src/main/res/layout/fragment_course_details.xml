@@ -19,12 +19,13 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:transitionGroup="true"
         tools:context="com.woodymats.openauth.ui.courseDetails.CourseDetailsFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="180dp"
             android:animateLayoutChanges="true"
             android:theme="@style/Theme.OpenAuth.AppBarOverlay">
 
@@ -40,7 +41,7 @@
                 <ImageView
                     android:id="@+id/courseImage"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="180dp"
                     imageUrl="@{viewModel.course.courseImage}"
                     android:fitsSystemWindows="true"
                     android:adjustViewBounds="true"
@@ -52,6 +53,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:elevation="0dp"
                     android:backgroundTint="@android:color/transparent"
                     app:title="@{viewModel.course.title}"
                     app:popupTheme="@style/Theme.OpenAuth.PopupOverlay"
@@ -112,6 +114,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    chaptersData="@{viewModel.course.chapters}"
                     app:layout_constraintTop_toBottomOf="@id/courseDescription"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -127,12 +130,13 @@
             loadingInProcess="@{viewModel.showLoadingBar}"
             android:layout_gravity="center" />
 
-        <LinearLayout
+        <com.google.android.material.bottomappbar.BottomAppBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="@{viewModel.hideEnrollLinear ? View.GONE : View.VISIBLE}"
             android:layout_gravity="bottom"
+            app:hideOnScroll="true"
             android:weightSum="3">
 
             <Space
@@ -155,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-        </LinearLayout>
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

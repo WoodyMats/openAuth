@@ -56,6 +56,8 @@
     <!--Color surface (light), color on error (light), -->
     <!--color on surface (dark), color on surface (dark)-->
     <color name="white_50">#ffffff</color>
+    
+    <color name="taupe_100">#F0EAE2</color>
 
     <color name="black_800">#121212</color> <!--Color surface (dark)-->
     <!--Color on secondary (light), color on background (light),-->

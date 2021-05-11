@@ -2,6 +2,8 @@
   <dictionary name="woodymats">
     <words>
       <w>gson</w>
+      <w>openauth</w>
+      <w>woodymats</w>
     </words>
   </dictionary>
 </component>

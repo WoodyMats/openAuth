@@ -58,7 +58,7 @@ class CourseDetailsViewModel(
     private fun getCourseFromCache() {
         viewModelScope.launch {
             _course.value =
-                repository.getCourseById(courseId) //database.courseDAO.getCourseById(courseId)
+                repository.getCourseById(courseId)
             courseTemp = database.courseDAO.getCourseById(courseId)
         }
     }

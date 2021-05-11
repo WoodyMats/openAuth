@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1028243351279",
+    "project_id": "openauth-4733a",
+    "storage_bucket": "openauth-4733a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028243351279:android:2be4ad0252e74216d41d1a",
+        "android_client_info": {
+          "package_name": "com.woodymats.openauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028243351279-pkm2s6j6h0nrnsa8bm0f629aaqfssf00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEZ3ohE1-X67-FNqTmYHgUzJxoskv64IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028243351279-pkm2s6j6h0nrnsa8bm0f629aaqfssf00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

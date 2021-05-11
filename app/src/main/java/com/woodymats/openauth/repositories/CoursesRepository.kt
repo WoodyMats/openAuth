@@ -51,7 +51,8 @@ class CoursesRepository(private val database: AppDatabase) {
             description = networkEntity.description,
             courseImage = networkEntity.courseImage,
             userId = networkEntity.userId,
-            author = networkEntity.author
+            author = networkEntity.author,
+            chapters = mapToChapterListEntity(networkEntity.chapters)
         )
     }
 
@@ -62,7 +63,8 @@ class CoursesRepository(private val database: AppDatabase) {
             description = networkEntity.description,
             courseImage = networkEntity.courseImage,
             userId = userId,
-            author = networkEntity.author
+            author = networkEntity.author,
+            chapters = mapToChapterListEntity(networkEntity.chapters)
         )
     }
 

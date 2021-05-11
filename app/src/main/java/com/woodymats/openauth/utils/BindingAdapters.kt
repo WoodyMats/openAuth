@@ -10,6 +10,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.woodymats.openauth.adapters.MyCoursesAdapter
 import com.woodymats.openauth.R
 import com.woodymats.openauth.adapters.AllCoursesAdapter
+import com.woodymats.openauth.adapters.ChaptersAdapter
+import com.woodymats.openauth.models.Chapter
 import com.woodymats.openauth.models.Course
 import com.woodymats.openauth.models.Enrollment
 
@@ -33,6 +35,13 @@ fun bindEnrollmentsRecyclerView(recyclerView: RecyclerView, data: List<Enrollmen
 fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<Course>?) {
     val adapter = recyclerView.adapter as AllCoursesAdapter
     adapter.submitList(data)
+}
+
+@BindingAdapter("chaptersData")
+fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<Chapter>?) {
+    val adapter = recyclerView.adapter as ChaptersAdapter
+    val sortedList = data?.sortedBy { it.order }
+    adapter.submitList(sortedList)
 }
 
 /**

@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialContainerTransform
 import com.woodymats.openauth.R
+import com.woodymats.openauth.adapters.ChaptersAdapter
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.FragmentCourseDetailsBinding
 import com.woodymats.openauth.utils.ApiCallStatus
@@ -40,11 +42,19 @@ class CourseDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentCourseDetailsBinding.inflate(layoutInflater)
         setUpViewModel()
+        setUpRecyclerView()
         setUpObservers()
         return binding.root
+    }
+
+    private fun setUpRecyclerView() {
+        binding.chaptersRecyclerView.also {
+            it.layoutManager = LinearLayoutManager(fragmentContext, LinearLayoutManager.VERTICAL, false)
+            it.adapter = ChaptersAdapter()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

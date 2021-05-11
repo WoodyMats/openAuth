@@ -26,8 +26,8 @@ data class CourseEntity(
     @ColumnInfo(name = "author")
     var author: String = "",
 
-    // @ColumnInfo(name = "chapters")
+    @ColumnInfo(name = "chapters")
     // @Relation(parentColumn = "id", entityColumn = "course_id", entity = Chapter::class)
-    // var chapters: List<Chapter>
+    var chapters: List<Chapter>
 
 )
