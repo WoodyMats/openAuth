@@ -7,14 +7,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.woodymats.openauth.models.User
-import kotlinx.coroutines.flow.Flow
 import org.jetbrains.annotations.NotNull
 
 @Dao
 interface UserDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)
+    suspend fun insertUser(user: User)
 
     @Update
     suspend fun updateUser(user: User)

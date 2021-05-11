@@ -3,16 +3,14 @@ package com.woodymats.openauth.ui.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.woodymats.openauth.MainActivity
 import com.woodymats.openauth.R
-import com.woodymats.openauth.databases.AppDatabase
 import com.woodymats.openauth.databinding.ActivityLoginBinding
-import com.woodymats.openauth.network.RetrofitClient
-import com.woodymats.openauth.repositories.LoginRepository
+import com.woodymats.openauth.ui.signup.SignUpActivity
 import com.woodymats.openauth.utils.ApiCallStatus
+import com.woodymats.openauth.utils.PREFERENCES
 
 class LoginActivity : AppCompatActivity() {
 
@@ -24,36 +22,89 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        binding.lifecycleOwner = this
-        val application = requireNotNull(this).application
-        val viewModelFactory = LoginViewModelFactory(application)
-        binding.viewModel =
-            ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
-        // binding.executePendingBindings()
+        setUpViewModel()
+        setUpObservers()
+        setContentView(binding.root)
+    }
 
-        viewModel.callStatus.observe(this, Observer {
+    private fun setUpObservers() {
+        viewModel.goToSignUp.observe(this, {
+            if (it) {
+                startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+                viewModel.onSignUpNavigateFinish()
+            }
+        })
+
+        viewModel.emailErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.emailEditTextLayout.error = null
+            } else {
+                binding.emailEditTextLayout.error = it
+            }
+        })
+
+        viewModel.passwordErrorMessage.observe(this, {
+            if (it.isNullOrEmpty()) {
+                binding.passwordEditTextLayout.error = null
+            } else {
+                binding.passwordEditTextLayout.error = it
+            }
+        })
+
+        // viewModel.errorMessage.observe(this, {
+        //     if (!it.isNullOrEmpty()) {
+        //         Snackbar.make(
+        //             binding.root,
+        //             it,
+        //             Snackbar.LENGTH_LONG
+        //         ).show()
+        //     }
+        // })
+
+        viewModel.callStatus.observe(this, {
             when (it) {
-                ApiCallStatus.ERROR -> Snackbar.make(
+                ApiCallStatus.UNKNOWNERROR -> Snackbar.make(
                     binding.root,
-                    R.string.password_empty,
+                    R.string.unknown_error,
                     Snackbar.LENGTH_LONG
                 ).show()
-                ApiCallStatus.LOADING -> Snackbar.make(
+
+                ApiCallStatus.NOINTERNETERROR -> Snackbar.make(
                     binding.root,
-                    R.string.email_invalid,
+                    R.string.no_internet_connection,
                     Snackbar.LENGTH_LONG
                 ).show()
-                else -> {
+
+                ApiCallStatus.AUTHERROR -> Snackbar.make(
+                    binding.root,
+                    R.string.wrong_credentials,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                ApiCallStatus.SERVERERROR -> Snackbar.make(
+                    binding.root,
+                    R.string.server_error,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                ApiCallStatus.SUCCESS -> {
                     startActivity(
                         Intent(this@LoginActivity, MainActivity::class.java)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     )
                     finish()
-                    // "Have to add API call for login!! (onSuccess)"
                 }
             }
         })
-        setContentView(binding.root)
+    }
+
+    private fun setUpViewModel() {
+        binding.lifecycleOwner = this
+        val application = requireNotNull(this).application
+        val viewModelFactory = LoginViewModelFactory(application, getSharedPreferences(PREFERENCES, MODE_PRIVATE))
+        binding.viewModel =
+            ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
+        // binding.executePendingBindings()
     }
 }
