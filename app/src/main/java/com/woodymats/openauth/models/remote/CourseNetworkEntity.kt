@@ -1,4 +1,4 @@
-package com.woodymats.openauth.models
+package com.woodymats.openauth.models.remote
 
 import com.google.gson.annotations.SerializedName
 

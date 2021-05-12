@@ -5,10 +5,11 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.woodymats.openauth.models.Chapter
+import com.woodymats.openauth.models.local.ChapterEntity
 import com.woodymats.openauth.models.Course
-import com.woodymats.openauth.models.CourseEntity
+import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.models.Enrollment
+import com.woodymats.openauth.models.local.ContentEntity
 
 @Dao
 interface CourseDAO {
@@ -20,11 +21,17 @@ interface CourseDAO {
     suspend fun insertCourseEntity(course: CourseEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertChapters(chapters: List<Chapter>)
+    suspend fun insertChapters(chapters: List<ChapterEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertContents(contents: List<ContentEntity>)
 
     suspend fun insertEnrollment(enrollment: Enrollment) {
         insertCourseEntity(enrollment.course)
         insertChapters(enrollment.chapters)
+        for (chapter in enrollment.chapters) {
+            insertContents(chapter.contents)
+        }
     }
 
     suspend fun insertCourse(course: Course) {

@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             // Log and toast
             val msg = token ?: ""
             Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
 

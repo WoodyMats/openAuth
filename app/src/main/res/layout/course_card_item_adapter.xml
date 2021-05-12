@@ -5,7 +5,7 @@
     <data>
         <variable
             name="course"
-            type="com.woodymats.openauth.models.CourseEntity" />
+            type="com.woodymats.openauth.models.local.CourseEntity" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

@@ -1,4 +1,4 @@
-package com.woodymats.openauth.models
+package com.woodymats.openauth.models.remote
 
 import com.google.gson.annotations.SerializedName
 
@@ -10,5 +10,6 @@ data class ChapterNetworkEntity(
     val chapterImage: String = "",
     val order: Int,
     @SerializedName("course_id")
-    val courseId: Int
+    val courseId: Int,
+    val contents: List<ContentNetworkEntity>?
 )

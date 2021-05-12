@@ -40,5 +40,6 @@
     <string name="description_string">Description</string>
     <string name="enroll_string">Enroll</string>
     <string name="enrolled_to_course">You enrolled to %1$s</string>
+    <string name="already_enrolled">You have already enrolled to this course</string>
 
 </resources>

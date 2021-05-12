@@ -17,7 +17,7 @@ import com.woodymats.openauth.R
 import com.woodymats.openauth.adapters.AllCoursesAdapter
 import com.woodymats.openauth.adapters.MyCoursesAdapter
 import com.woodymats.openauth.databinding.FragmentHomeBinding
-import com.woodymats.openauth.models.CourseEntity
+import com.woodymats.openauth.models.local.CourseEntity
 
 class HomeFragment : Fragment(), CourseRecyclerViewClickListener {
 

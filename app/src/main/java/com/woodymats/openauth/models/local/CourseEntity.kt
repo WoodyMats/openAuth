@@ -1,4 +1,4 @@
-package com.woodymats.openauth.models
+package com.woodymats.openauth.models.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -28,6 +28,6 @@ data class CourseEntity(
 
     @ColumnInfo(name = "chapters")
     // @Relation(parentColumn = "id", entityColumn = "course_id", entity = Chapter::class)
-    var chapters: List<Chapter>
+    var chapters: List<ChapterEntity>
 
 )

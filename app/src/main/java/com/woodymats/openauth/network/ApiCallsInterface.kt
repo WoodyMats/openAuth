@@ -1,12 +1,12 @@
 package com.woodymats.openauth.network
 
 import com.google.gson.JsonObject
-import com.woodymats.openauth.models.CourseNetworkEntity
+import com.woodymats.openauth.models.remote.CourseNetworkEntity
 import com.woodymats.openauth.models.EnrollToCourseModel
-import com.woodymats.openauth.models.EnrollmentNetworkEntity
+import com.woodymats.openauth.models.remote.EnrollmentNetworkEntity
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.SignUpEntity
-import com.woodymats.openauth.models.User
+import com.woodymats.openauth.models.local.UserEntity
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,7 +18,7 @@ interface ApiCallsInterface {
 
     @Headers("Content-Type: application/json")
     @POST("checkLogin")
-    suspend fun loginUser(@Body entity: LoginEntity): User
+    suspend fun loginUser(@Body entity: LoginEntity): UserEntity
 
     @Headers("Content-Type: application/json")
     @POST("register")

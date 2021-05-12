@@ -11,7 +11,7 @@ import com.woodymats.openauth.adapters.MyCoursesAdapter
 import com.woodymats.openauth.R
 import com.woodymats.openauth.adapters.AllCoursesAdapter
 import com.woodymats.openauth.adapters.ChaptersAdapter
-import com.woodymats.openauth.models.Chapter
+import com.woodymats.openauth.models.local.ChapterEntity
 import com.woodymats.openauth.models.Course
 import com.woodymats.openauth.models.Enrollment
 
@@ -38,7 +38,7 @@ fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<Course>?) 
 }
 
 @BindingAdapter("chaptersData")
-fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<Chapter>?) {
+fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<ChapterEntity>?) {
     val adapter = recyclerView.adapter as ChaptersAdapter
     val sortedList = data?.sortedBy { it.order }
     adapter.submitList(sortedList)

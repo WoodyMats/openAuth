@@ -102,7 +102,7 @@ class CourseDetailsFragment : Fragment() {
 
                 ApiCallStatus.SERVERERROR -> Snackbar.make(
                     binding.root,
-                    R.string.server_error,
+                    R.string.already_enrolled,
                     Snackbar.LENGTH_LONG
                 ).show()
 

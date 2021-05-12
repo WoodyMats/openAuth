@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.woodymats.openauth.databases.AppDatabase
-import com.woodymats.openauth.models.CourseEntity
+import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.repositories.CoursesRepository
 import com.woodymats.openauth.utils.ApiCallStatus

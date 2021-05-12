@@ -1,13 +1,14 @@
 package com.woodymats.openauth.repositories
 
 import com.woodymats.openauth.databases.AppDatabase
-import com.woodymats.openauth.models.Chapter
-import com.woodymats.openauth.models.ChapterNetworkEntity
+import com.woodymats.openauth.models.local.ChapterEntity
+import com.woodymats.openauth.models.remote.ChapterNetworkEntity
 import com.woodymats.openauth.models.Course
-import com.woodymats.openauth.models.CourseEntity
-import com.woodymats.openauth.models.CourseNetworkEntity
+import com.woodymats.openauth.models.local.CourseEntity
+import com.woodymats.openauth.models.remote.CourseNetworkEntity
 import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.models.Enrollment
+import com.woodymats.openauth.models.local.ContentEntity
 import com.woodymats.openauth.network.RetrofitClient
 
 class CoursesRepository(private val database: AppDatabase) {
@@ -68,18 +69,19 @@ class CoursesRepository(private val database: AppDatabase) {
         )
     }
 
-    private fun mapToChapterEntity(networkEntity: ChapterNetworkEntity): Chapter {
-        return Chapter(
+    private fun mapToChapterEntity(networkEntity: ChapterNetworkEntity): ChapterEntity {
+        return ChapterEntity(
             chapterId = networkEntity.chapterId,
             title = networkEntity.title,
             description = networkEntity.description,
             chapterImage = networkEntity.chapterImage,
             order = networkEntity.order,
-            courseId = networkEntity.courseId
+            courseId = networkEntity.courseId,
+            contents = (networkEntity.contents ?: emptyList<ContentEntity>()) as List<ContentEntity>
         )
     }
 
-    private fun mapToChapterListEntity(networkEntityList: List<ChapterNetworkEntity>): List<Chapter> {
+    private fun mapToChapterListEntity(networkEntityList: List<ChapterNetworkEntity>): List<ChapterEntity> {
         return if (!networkEntityList.isNullOrEmpty()) {
             networkEntityList.map {
                 mapToChapterEntity(it)
