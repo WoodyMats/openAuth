@@ -57,8 +57,8 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
 
     init {
         if (haveToFetchFromServer()) {
-            getUserEnrollments()
             getAllCourses()
+            getUserEnrollments()
         } else {
             getUserEnrollmentsFromCache()
             getAllCoursesFromCache()
@@ -83,7 +83,7 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
 
     private fun haveToFetchFromServer(): Boolean {
         // TODO(Define a policy to retrieve data from server)
-        return false
+        return true
     }
 
     private fun getAllCourses() {
