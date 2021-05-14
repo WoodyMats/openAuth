@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.ChapterCardItemAdapterBinding
 import com.woodymats.openauth.models.local.ChapterEntity
+import com.woodymats.openauth.ui.courseDetails.ChaptersRecyclerViewClickListener
 
-class ChaptersAdapter :
+class ChaptersAdapter(private val listener: ChaptersRecyclerViewClickListener) :
     ListAdapter<ChapterEntity, ChaptersAdapter.ChapterViewHolder>(ChaptersDiffCallback()) {
 
     inner class ChapterViewHolder(val adapterChapterItemAdapterBinding: ChapterCardItemAdapterBinding) :
@@ -27,21 +28,7 @@ class ChaptersAdapter :
 
     override fun onBindViewHolder(holder: ChapterViewHolder, position: Int) {
         holder.adapterChapterItemAdapterBinding.chapter = getItem(position)
-        // holder.adapterChapterItemAdapterBinding.chapterCardView.setOnClickListener {
-        //     if (holder.adapterChapterItemAdapterBinding.chapterDescription.height != WRAP_CONTENT) {
-        //         TransitionManager.beginDelayedTransition(
-        //             holder.adapterChapterItemAdapterBinding.chapterCardView,
-        //             AutoTransition()
-        //         )
-        //         holder.adapterChapterItemAdapterBinding.chapterDescription.height = WRAP_CONTENT
-        //     } else {
-        //         TransitionManager.beginDelayedTransition(
-        //             holder.adapterChapterItemAdapterBinding.chapterCardView,
-        //             AutoTransition()
-        //         )
-        //         holder.adapterChapterItemAdapterBinding.chapterDescription.height = MATCH_CONSTRAINT
-        //     }
-        // }
+        holder.adapterChapterItemAdapterBinding.root.setOnClickListener { listener.onChapterItemClicked(it, getItem(position)) }
         holder.adapterChapterItemAdapterBinding.executePendingBindings()
     }
 }

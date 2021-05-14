@@ -14,7 +14,7 @@ data class ContentEntity(
     var title: String = "",
 
     @ColumnInfo(name = "completed")
-    var completed: Boolean = false,
+    var completed: Int = 0,
 
     @ColumnInfo(name = "content")
     var content: String = "",

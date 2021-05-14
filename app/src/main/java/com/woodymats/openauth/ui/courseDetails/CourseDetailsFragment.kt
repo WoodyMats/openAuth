@@ -18,10 +18,11 @@ import com.woodymats.openauth.R
 import com.woodymats.openauth.adapters.ChaptersAdapter
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.FragmentCourseDetailsBinding
+import com.woodymats.openauth.models.local.ChapterEntity
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.PREFERENCES
 
-class CourseDetailsFragment : Fragment() {
+class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
 
     private lateinit var viewModel: CourseDetailsViewModel
     private lateinit var binding: FragmentCourseDetailsBinding
@@ -53,7 +54,7 @@ class CourseDetailsFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.chaptersRecyclerView.also {
             it.layoutManager = LinearLayoutManager(fragmentContext, LinearLayoutManager.VERTICAL, false)
-            it.adapter = ChaptersAdapter()
+            it.adapter = ChaptersAdapter(this)
         }
     }
 
@@ -122,5 +123,10 @@ class CourseDetailsFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    override fun onChapterItemClicked(view: View, chapter: ChapterEntity) {
+        val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToCourseContentFragment(chapter.title, chapter.chapterId)
+        findNavController().navigate(action)
     }
 }

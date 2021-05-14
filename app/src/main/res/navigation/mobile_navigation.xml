@@ -28,11 +28,22 @@
             android:name="courseImage"
             app:argType="string"
             android:defaultValue=" " />
+        <action
+            android:id="@+id/action_courseDetailsFragment_to_courseContentFragment"
+            app:destination="@id/courseContentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/courseContentFragment"
+        android:name="com.woodymats.openauth.ui.courseContent.CourseContentFragment"
+        android:label="{chapterName}" >
+        <argument
+            android:name="chapterName"
+            app:argType="string"
+            android:defaultValue="Chapter" />
+        <argument
+            android:name="chapterId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.woodymats.openauth.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 </navigation>

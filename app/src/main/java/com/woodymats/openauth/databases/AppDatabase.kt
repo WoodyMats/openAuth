@@ -10,12 +10,11 @@ import com.woodymats.openauth.models.local.ContentEntity
 import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.models.local.UserEntity
 
-@Database(entities = [UserEntity::class, CourseEntity::class, ChapterEntity::class, ContentEntity::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class, CourseEntity::class, ChapterEntity::class, ContentEntity::class], version = 2, exportSchema = false)
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract val userDAO: UserDAO
     abstract val courseDAO: CourseDAO
-    // abstract val chapterDAO: ChapterDAO
 }
 
 @Volatile

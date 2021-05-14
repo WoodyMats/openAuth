@@ -25,8 +25,6 @@ class CourseDetailsViewModel(
     private var userToken = preferences.getString(USER_TOKEN, "").toString()
     private val repository = CoursesRepository(database)
 
-    private var courseTemp: CourseEntity? = null
-
     private var _course: MutableLiveData<CourseEntity> = MutableLiveData(null)
     val course: LiveData<CourseEntity>
         get() = _course
@@ -59,7 +57,6 @@ class CourseDetailsViewModel(
         viewModelScope.launch {
             _course.value =
                 repository.getCourseById(courseId)
-            courseTemp = database.courseDAO.getCourseById(courseId)
         }
     }
 

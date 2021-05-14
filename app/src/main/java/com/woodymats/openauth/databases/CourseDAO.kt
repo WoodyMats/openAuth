@@ -52,4 +52,10 @@ interface CourseDAO {
 
     @Query("SELECT * FROM courses_table WHERE id == :courseId")
     suspend fun getCourseById(courseId: Long): CourseEntity
+
+    @Query("SELECT * FROM chapters_table WHERE chapterId == :chapterId")
+    suspend fun getChapterById(chapterId: Long): ChapterEntity
+
+    @Query("SELECT * FROM contents_table WHERE chapter_id == :chapterId")
+    suspend fun getChapterContents(chapterId: Long): List<ContentEntity>
 }

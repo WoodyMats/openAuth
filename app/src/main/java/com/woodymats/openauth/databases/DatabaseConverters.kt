@@ -24,15 +24,23 @@ class DatabaseConverters {
 
     @TypeConverter
     fun stringToContentsList(contentsJson: String): List<ContentEntity> {
-        val gson = Gson()
-        val type = object : TypeToken<List<ContentEntity>>() {}.type
-        return gson.fromJson(contentsJson, type)
+        return if (contentsJson.isEmpty()) {
+            emptyList()
+        } else {
+            val gson = Gson()
+            val type = object : TypeToken<List<ContentEntity>>() {}.type
+            gson.fromJson(contentsJson, type)
+        }
     }
 
     @TypeConverter
     fun contentsListToString(contentsEntityList: List<ContentEntity>): String {
-        val gson = Gson()
-        val type = object : TypeToken<List<ContentEntity>>() {}.type
-        return gson.toJson(contentsEntityList, type)
+        return if (contentsEntityList.isNullOrEmpty()) {
+            ""
+        } else {
+            val gson = Gson()
+            val type = object : TypeToken<List<ContentEntity>>() {}.type
+            return gson.toJson(contentsEntityList, type)
+        }
     }
 }
