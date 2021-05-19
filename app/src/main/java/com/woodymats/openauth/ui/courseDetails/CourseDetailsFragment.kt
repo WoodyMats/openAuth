@@ -126,7 +126,7 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
     }
 
     override fun onChapterItemClicked(view: View, chapter: ChapterEntity) {
-        val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToCourseContentFragment(chapter.title, chapter.chapterId)
+        val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToCourseContentsListFragment(chapter.title, chapter.chapterId)
         findNavController().navigate(action)
     }
 }

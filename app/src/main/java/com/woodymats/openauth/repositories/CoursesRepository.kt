@@ -48,6 +48,8 @@ class CoursesRepository(private val database: AppDatabase) {
 
     suspend fun getAllCoursesFromCache(): List<Course> = database.courseDAO.getAllCourses()
 
+    suspend fun getChapterContentsList(chapterId: Long): List<ContentEntity> = database.courseDAO.getChapterContents(chapterId)
+
     private fun mapToCourseEntity(networkEntity: CourseNetworkEntity): CourseEntity {
         return CourseEntity(
             id = networkEntity.id,

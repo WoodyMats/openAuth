@@ -1,4 +1,4 @@
-package com.woodymats.openauth.ui.courseContent
+package com.woodymats.openauth.ui.courseContentView
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
@@ -13,7 +13,7 @@ import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.USER_TOKEN
 import kotlinx.coroutines.launch
 
-class CourseContentViewModel(
+class CourseContentSharedViewModel(
     private val preferences: SharedPreferences,
     private val database: AppDatabase,
     private val chapterId: Long
@@ -61,7 +61,7 @@ class CourseContentViewModel(
     private fun getChapterAndContentsFromCache() {
         viewModelScope.launch {
             _chapter.value = repository.getChapterById(chapterId)
-            _contentsList.value = _chapter.value?.contents ?: emptyList()
+            _contentsList.value = repository.getChapterContentsList(chapterId)
             if (_contentsList.value!!.isNotEmpty()) {
                 _currentContent.value = _contentsList.value!![currentContentPosition.value ?: 0]
             }

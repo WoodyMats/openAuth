@@ -1,4 +1,4 @@
-package com.woodymats.openauth.ui.courseContent
+package com.woodymats.openauth.ui.courseContentView
 
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
@@ -12,6 +12,6 @@ class CourseContentViewModelFactory(
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CourseContentViewModel(sharedPreferences, database, chapterId) as T
+        return CourseContentSharedViewModel(sharedPreferences, database, chapterId) as T
     }
 }

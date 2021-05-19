@@ -29,17 +29,33 @@
             app:argType="string"
             android:defaultValue=" " />
         <action
-            android:id="@+id/action_courseDetailsFragment_to_courseContentFragment"
-            app:destination="@id/courseContentFragment" />
+            android:id="@+id/action_courseDetailsFragment_to_courseContentsListFragment"
+            app:destination="@id/courseContentsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/courseContentFragment"
-        android:name="com.woodymats.openauth.ui.courseContent.CourseContentFragment"
-        android:label="{chapterName}" >
+        android:name="com.woodymats.openauth.ui.courseContentView.CourseContentFragment"
+        android:label="{contentName}">
+        <argument
+            android:name="contentName"
+            app:argType="string"
+            android:defaultValue="Content" />
+        <argument
+            android:name="contentId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+    <fragment
+        android:id="@+id/courseContentsListFragment"
+        android:name="com.woodymats.openauth.ui.courseContentsList.CourseContentsListFragment"
+        android:label="{chapterName}">
+        <action
+            android:id="@+id/action_courseContentsListFragment_to_courseContentFragment"
+            app:destination="@id/courseContentFragment" />
         <argument
             android:name="chapterName"
             app:argType="string"
-            android:defaultValue="Chapter" />
+            android:defaultValue='""' />
         <argument
             android:name="chapterId"
             app:argType="long"

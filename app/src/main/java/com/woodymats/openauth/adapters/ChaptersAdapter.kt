@@ -28,7 +28,12 @@ class ChaptersAdapter(private val listener: ChaptersRecyclerViewClickListener) :
 
     override fun onBindViewHolder(holder: ChapterViewHolder, position: Int) {
         holder.adapterChapterItemAdapterBinding.chapter = getItem(position)
-        holder.adapterChapterItemAdapterBinding.root.setOnClickListener { listener.onChapterItemClicked(it, getItem(position)) }
+        holder.adapterChapterItemAdapterBinding.root.setOnClickListener {
+            listener.onChapterItemClicked(
+                it,
+                getItem(position)
+            )
+        }
         holder.adapterChapterItemAdapterBinding.executePendingBindings()
     }
 }
