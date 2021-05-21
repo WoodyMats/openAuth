@@ -41,5 +41,7 @@
     <string name="enroll_string">Enroll</string>
     <string name="enrolled_to_course">You enrolled to %1$s</string>
     <string name="already_enrolled">You have already enrolled to this course</string>
+    <string name="upload_a_profile_image">Upload a profile image… (Up to: 2MB)</string>
+    <string name="menu_profile">My Profile</string>
 
 </resources>

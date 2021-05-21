@@ -7,12 +7,16 @@ import com.woodymats.openauth.models.remote.EnrollmentNetworkEntity
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.SignUpEntity
 import com.woodymats.openauth.models.local.UserEntity
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface ApiCallsInterface {
 
@@ -38,6 +42,22 @@ interface ApiCallsInterface {
 
     @Headers("Content-Type: application/json")
     @POST("enrollToCourse")
-    suspend fun enrollToCourse(@Header("Authorization") token: String, @Body enrollToCourseModel: EnrollToCourseModel)
+    suspend fun enrollToCourse(
+        @Header("Authorization") token: String,
+        @Body enrollToCourseModel: EnrollToCourseModel
+    )
 
+    // @JvmSuppressWildcards
+    @Multipart
+    @POST("register")
+    suspend fun createAccountWithProfileImage(
+        // @PartMap map: Map<String, RequestBody>
+        @Part file: MultipartBody.Part,
+        @Part("firstName") firstName: RequestBody,
+        @Part("lastName") lastName: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("dateOfBirth") dateOfBirth: RequestBody,
+        @Part("canCreateCourses") canCreateCourses: RequestBody,
+        ): JsonObject
 }

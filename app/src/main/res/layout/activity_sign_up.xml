@@ -164,6 +164,21 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/profileImageUploadButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAllCaps="false"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textSize="14sp"
+                android:text="@string/upload_a_profile_image"
+                style="@style/TextAppearance.OpenAuth.Button"
+                app:layout_constraintStart_toStartOf="@+id/passwordEditTextLayout"
+                app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout"
+                app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditTextLayout"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dateOfBirthEditTextLayout"
                 android:layout_width="0dp"
@@ -177,7 +192,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:layout_constraintEnd_toEndOf="@+id/emailEditTextLayout"
                 app:layout_constraintStart_toStartOf="@+id/emailEditTextLayout"
-                app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditTextLayout">
+                app:layout_constraintTop_toBottomOf="@id/profileImageUploadButton">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dateOfBirthEditText"

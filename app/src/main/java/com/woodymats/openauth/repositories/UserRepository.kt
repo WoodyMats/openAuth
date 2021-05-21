@@ -10,11 +10,28 @@ import com.woodymats.openauth.utils.USER_ID
 import com.woodymats.openauth.utils.USER_TOKEN
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class UserRepository(private val database: AppDatabase? = null) {
 
     suspend fun registerUser(signUpEntity: SignUpEntity) {
         RetrofitClient.apiInterface.createAccount(signUpEntity)
+    }
+
+    suspend fun registerUserWithProfileImage(user: SignUpEntity) {
+
+        val fileRequestBody = RequestBody.create(MediaType.parse("image/*"), user.file!!)
+        val file = MultipartBody.Part.createFormData("file", user.file!!.path, fileRequestBody) //createFormData("file", user.file!!.name, fileRequestBody)
+        val firstName = RequestBody.create(MultipartBody.FORM, user.firstName)
+        val lastName = RequestBody.create(MultipartBody.FORM, user.lastName)
+        val email = RequestBody.create(MultipartBody.FORM, user.email)
+        val password = RequestBody.create(MultipartBody.FORM, user.password)
+        val dateOfBirth = RequestBody.create(MultipartBody.FORM, user.dateOfBirth.toString())
+        val canCreateCourses = RequestBody.create(MultipartBody.FORM, user.canCreateCourses.toString())
+
+        val temp = RetrofitClient.apiInterface.createAccountWithProfileImage(file, firstName, lastName, email, password, dateOfBirth, canCreateCourses)
     }
 
     suspend fun loginUser(loginEntity: LoginEntity, preferences: SharedPreferences) {

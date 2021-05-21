@@ -3,14 +3,16 @@ package com.woodymats.openauth.models
 import android.text.TextUtils
 import android.util.Patterns
 import androidx.databinding.BaseObservable
+import java.io.File
 
 data class SignUpEntity(
-    private var firstName: String,
-    private var lastName: String,
-    private var email: String,
-    private var password: String,
-    private var dateOfBirth: Long = -1,
-    private var canCreateCourses: Int = 0
+    var firstName: String,
+    var lastName: String,
+    var email: String,
+    var password: String,
+    var dateOfBirth: Long = -1,
+    var canCreateCourses: Int = 0,
+    var file: File? = null
 ) : BaseObservable() {
 
     fun isFirstNameValid(): Int {
@@ -53,23 +55,23 @@ data class SignUpEntity(
             && confirmPasswordText == password && dateOfBirth != -1L
     }
 
-    fun setFirstName(firstName: String) {
-        this.firstName = firstName
-    }
-
-    fun setLastName(lastName: String) {
-        this.lastName = lastName
-    }
-
-    fun setEmail(email: String) {
-        this.email = email
-    }
-
-    fun setPassword(password: String) {
-        this.password = password
-    }
-
-    fun setDateOfBirth(dateOfBirth: Long) {
-        this.dateOfBirth = dateOfBirth
-    }
+    // fun setFirstName(firstName: String) {
+    //     this.firstName = firstName
+    // }
+    //
+    // fun setLastName(lastName: String) {
+    //     this.lastName = lastName
+    // }
+    //
+    // fun setEmail(email: String) {
+    //     this.email = email
+    // }
+    //
+    // fun setPassword(password: String) {
+    //     this.password = password
+    // }
+    //
+    // fun setDateOfBirth(dateOfBirth: Long) {
+    //     this.dateOfBirth = dateOfBirth
+    // }
 }

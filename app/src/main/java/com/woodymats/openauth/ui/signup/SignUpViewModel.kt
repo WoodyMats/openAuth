@@ -1,6 +1,9 @@
 package com.woodymats.openauth.ui.signup
 
 import android.app.Application
+import android.database.Cursor
+import android.net.Uri
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -15,6 +18,8 @@ import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.hasInternetConnection
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -24,6 +29,32 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
     private val repository: UserRepository = UserRepository()
     private var confirmPasswordText: String = ""
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()
+
+    private var _profileImageFile: MutableLiveData<File?> = MutableLiveData(null)
+    val profileImageFile: LiveData<File?>
+        get() = _profileImageFile
+    fun setProfileImageFile(profileImageUri: Uri?) {
+        try {
+            val temp = getRealPathFromUri(profileImageUri) ?: ""
+            _profileImageFile.value = File(getRealPathFromUri(profileImageUri) ?: "")
+            user.file = _profileImageFile.value
+        } catch (e: IOException) {
+            // Nothing for now
+        }
+    }
+
+    private fun getRealPathFromUri(contentUri: Uri?): String? {
+        var cursor: Cursor? = null
+        return try {
+            val proj = arrayOf(MediaStore.Images.Media.DATA)
+            cursor = app.contentResolver.query(contentUri!!, proj, null, null, null)
+            val columnIndex: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            cursor.getString(columnIndex)
+        } finally {
+            cursor?.close()
+        }
+    }
 
     val callStatus: LiveData<ApiCallStatus>
         get() = _callStatus
@@ -60,7 +91,7 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
     val firstNameTextWatcher: TextWatcher
         get() = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                user.setFirstName(s.toString())
+                user.firstName = s.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -73,7 +104,7 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
     val lastNameTextWatcher: TextWatcher
         get() = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                user.setLastName(s.toString())
+                user.lastName = s.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -87,7 +118,7 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
     val emailTextWatcher: TextWatcher
         get() = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                user.setEmail(s.toString())
+                user.email = s.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -100,7 +131,7 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
     val passwordTextWatcher: TextWatcher
         get() = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                user.setPassword(s.toString())
+                user.password = s.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -116,7 +147,7 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
                 if (!s.toString().isNullOrEmpty()) {
                     val dateFormat = SimpleDateFormat("MM/dd/yy", Locale.getDefault())
                     val date = dateFormat.parse(s.toString())
-                    user.setDateOfBirth(date?.time ?: -1)
+                    user.dateOfBirth = (date?.time ?: -1)
                 } else {
                     _dateOfBirthErrorMessage.value = app.getString(R.string.field_required)
                 }
@@ -240,7 +271,11 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
                 try {
                     showLoader()
                     _callStatus.value = ApiCallStatus.LOADING
-                    repository.registerUser(user)
+                    if (user.file != null) {
+                        repository.registerUserWithProfileImage(user)
+                    } else {
+                        repository.registerUser(user)
+                    }
                     _callStatus.value = ApiCallStatus.SUCCESS
                 } catch (e: HttpException) {
                     when (e.code()) {
