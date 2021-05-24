@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="course"
+            type="com.woodymats.openauth.models.local.CourseEntity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/searchCourseImageView"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            imageUrl="@{course.courseImage}"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/logo"
+            app:shapeAppearanceOverlay="@style/ProfileImageShape"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/searchCourseTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.OpenAuth.Body1"
+            android:text="@{course.title}"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@id/searchCourseImageView"
+            app:layout_constraintTop_toTopOf="@id/searchCourseImageView"
+            app:layout_constraintBottom_toBottomOf="@id/searchCourseImageView"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

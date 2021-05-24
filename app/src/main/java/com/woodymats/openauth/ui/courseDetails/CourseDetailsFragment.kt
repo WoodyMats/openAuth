@@ -37,7 +37,7 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
             // Scope the transition to a view in the hierarchy so we know it will be added under
             // the bottom app bar but over the elevation scale of the exiting HomeFragment.
             drawingViewId = R.id.nav_host_fragment
-            duration = 400L
+            duration = 200L
             scrimColor = Color.TRANSPARENT
             // setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
         }

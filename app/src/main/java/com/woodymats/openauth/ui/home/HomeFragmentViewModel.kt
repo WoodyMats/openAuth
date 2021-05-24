@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.woodymats.openauth.databases.getInstance
-import com.woodymats.openauth.models.Course
 import com.woodymats.openauth.models.Enrollment
+import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.repositories.CoursesRepository
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.PREFERENCES
@@ -29,8 +29,8 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
     val enrollments: LiveData<List<Enrollment>>
         get() = _enrollments
 
-    private var _courses: MutableLiveData<List<Course>> = MutableLiveData(emptyList())
-    val courses: LiveData<List<Course>>
+    private var _courses: MutableLiveData<List<CourseEntity>> = MutableLiveData(emptyList())
+    val courses: LiveData<List<CourseEntity>>
         get() = _courses
 
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()
@@ -83,7 +83,7 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
 
     private fun haveToFetchFromServer(): Boolean {
         // TODO(Define a policy to retrieve data from server)
-        return true
+        return hasInternetConnection(app)
     }
 
     private fun getAllCourses() {
@@ -137,4 +137,5 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
             }
         }
     }
+
 }

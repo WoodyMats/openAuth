@@ -29,7 +29,7 @@ class CoursesRepository(private val database: AppDatabase) {
     suspend fun getUserEnrollmentsFromCache(userId: Long): List<Enrollment> =
         database.courseDAO.getUserEnrollments(userId)
 
-    suspend fun getAllCourses(userToken: String?): List<Course> {
+    suspend fun getAllCourses(userToken: String?): List<CourseEntity> {
         val courses = RetrofitClient.apiInterface.getAllCourses(userToken!!)
         for (course in courses) {
             val tempCourse = Course(mapToCourseEntity(course), mapToChapterListEntity(course.chapters))
@@ -46,7 +46,7 @@ class CoursesRepository(private val database: AppDatabase) {
 
     suspend fun getChapterById(chapterId: Long): ChapterEntity = database.courseDAO.getChapterById(chapterId)
 
-    suspend fun getAllCoursesFromCache(): List<Course> = database.courseDAO.getAllCourses()
+    suspend fun getAllCoursesFromCache(): List<CourseEntity> = database.courseDAO.getAllCourses()
 
     suspend fun getChapterContentsList(chapterId: Long): List<ContentEntity> = database.courseDAO.getChapterContents(chapterId)
 

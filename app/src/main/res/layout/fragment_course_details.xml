@@ -4,11 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="courseImage"
-            type="java.lang.String" />
-
+        
         <variable
             name="viewModel"
             type="com.woodymats.openauth.ui.courseDetails.CourseDetailsViewModel" />

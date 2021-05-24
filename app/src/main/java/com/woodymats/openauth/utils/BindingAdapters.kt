@@ -3,21 +3,24 @@ package com.woodymats.openauth.utils
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.woodymats.openauth.adapters.MyCoursesAdapter
 import com.woodymats.openauth.R
 import com.woodymats.openauth.adapters.AllCoursesAdapter
 import com.woodymats.openauth.adapters.ChaptersAdapter
 import com.woodymats.openauth.adapters.CourseContentsListAdapter
+import com.woodymats.openauth.adapters.SearchCoursesAdapter
 import com.woodymats.openauth.models.local.ChapterEntity
-import com.woodymats.openauth.models.Course
 import com.woodymats.openauth.models.Enrollment
 import com.woodymats.openauth.models.local.ContentEntity
+import com.woodymats.openauth.models.local.CourseEntity
 
 @BindingAdapter("loadingInProcess")
 fun showLoading(view: View, loadingInProcess: Boolean) {
@@ -36,7 +39,14 @@ fun bindEnrollmentsRecyclerView(recyclerView: RecyclerView, data: List<Enrollmen
 }
 
 @BindingAdapter("listData")
-fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<Course>?) {
+fun bindSearchCourseAutoCompleteTextView(autoCompleteTextView: MaterialAutoCompleteTextView, data: List<CourseEntity>?) {
+    if (data != null) {
+        autoCompleteTextView.setAdapter(SearchCoursesAdapter(data))
+    }
+}
+
+@BindingAdapter("listData")
+fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<CourseEntity>?) {
     val adapter = recyclerView.adapter as AllCoursesAdapter
     adapter.submitList(data)
 }

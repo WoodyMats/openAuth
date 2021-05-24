@@ -30,4 +30,8 @@ data class CourseEntity(
     // @Relation(parentColumn = "id", entityColumn = "course_id", entity = Chapter::class)
     var chapters: List<ChapterEntity>
 
-)
+) {
+    override fun toString(): String {
+        return title
+    }
+}

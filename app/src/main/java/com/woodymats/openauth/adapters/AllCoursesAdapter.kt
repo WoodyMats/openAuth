@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.CourseCardItemAdapterBinding
-import com.woodymats.openauth.models.Course
+import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.ui.home.CourseRecyclerViewClickListener
 
-class AllCoursesAdapter(private val listener: CourseRecyclerViewClickListener): ListAdapter<Course, AllCoursesAdapter.AllCoursesViewHolder>(AllCoursesDiffCallback()) {
+class AllCoursesAdapter(private val listener: CourseRecyclerViewClickListener): ListAdapter<CourseEntity, AllCoursesAdapter.AllCoursesViewHolder>(AllCoursesDiffCallback()) {
 
     // override fun getItemCount() = enrollments.size
 
@@ -25,8 +25,8 @@ class AllCoursesAdapter(private val listener: CourseRecyclerViewClickListener): 
     )
 
     override fun onBindViewHolder(holder: AllCoursesViewHolder, position: Int) {
-        holder.adapterCourseCardItemAdapterBinding.course = getItem(position).course
-        holder.adapterCourseCardItemAdapterBinding.root.setOnClickListener { listener.onCourseItemClicked(it, getItem(position).course) }
+        holder.adapterCourseCardItemAdapterBinding.course = getItem(position)
+        holder.adapterCourseCardItemAdapterBinding.root.setOnClickListener { listener.onCourseItemClicked(it, getItem(position)) }
         holder.adapterCourseCardItemAdapterBinding.executePendingBindings()
     }
 
@@ -34,12 +34,12 @@ class AllCoursesAdapter(private val listener: CourseRecyclerViewClickListener): 
         RecyclerView.ViewHolder(adapterCourseCardItemAdapterBinding.root)
 }
 
-class AllCoursesDiffCallback : DiffUtil.ItemCallback<Course>() {
-    override fun areItemsTheSame(oldItem: Course, newItem: Course): Boolean {
-        return oldItem.course.id == newItem.course.id
+class AllCoursesDiffCallback : DiffUtil.ItemCallback<CourseEntity>() {
+    override fun areItemsTheSame(oldItem: CourseEntity, newItem: CourseEntity): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Course, newItem: Course): Boolean {
+    override fun areContentsTheSame(oldItem: CourseEntity, newItem: CourseEntity): Boolean {
         return oldItem == newItem
     }
 }

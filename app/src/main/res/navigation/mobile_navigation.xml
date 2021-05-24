@@ -24,10 +24,6 @@
             android:name="courseId"
             app:argType="long"
             android:defaultValue="-1L" />
-        <argument
-            android:name="courseImage"
-            app:argType="string"
-            android:defaultValue=" " />
         <action
             android:id="@+id/action_courseDetailsFragment_to_courseContentsListFragment"
             app:destination="@id/courseContentsListFragment" />

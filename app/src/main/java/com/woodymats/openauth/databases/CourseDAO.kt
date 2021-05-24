@@ -1,5 +1,6 @@
 package com.woodymats.openauth.databases
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -46,9 +47,8 @@ interface CourseDAO {
     @Query("SELECT * FROM courses_table WHERE user_id == :id")
     suspend fun getUserEnrollments(id: Long): List<Enrollment>
 
-    @Transaction
     @Query("SELECT * FROM courses_table")
-    suspend fun getAllCourses(): List<Course>
+    suspend fun getAllCourses(): List<CourseEntity>
 
     @Query("SELECT * FROM courses_table WHERE id == :courseId")
     suspend fun getCourseById(courseId: Long): CourseEntity
@@ -61,4 +61,7 @@ interface CourseDAO {
 
     @Query("UPDATE contents_table SET completed = 1 WHERE id == :contentId")
     suspend fun setContentAsCompleted(contentId: Long): Int
+
+    // @Query("SELECT * FROM courses_table WHERE courseTitle LIKE :query")
+    // suspend fun search(query : String) : LiveData<List<CourseEntity>>
 }
