@@ -1,11 +1,14 @@
 package com.woodymats.openauth.ui.signup
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -23,12 +26,27 @@ import java.util.Locale
 
 class SignUpActivity : AppCompatActivity() {
 
-    private val PICK_IMAGE_CODE = 100
-    private val MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0
     private lateinit var binding: ActivitySignUpBinding
     private val viewModel: SignUpViewModel by lazy {
         ViewModelProvider(this).get(SignUpViewModel::class.java)
     }
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                openPhotoGallery()
+            } else {
+                requestPermissionWithExplanation()
+            }
+        }
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultIntent = result.data
+                viewModel.setProfileImageFile(resultIntent?.data)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,35 +54,7 @@ class SignUpActivity : AppCompatActivity() {
         setUpViewModel()
         setUpObservers()
         setUpListeners()
-        checkWritePermission()
         setContentView(binding.root)
-    }
-
-    private fun checkWritePermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE)
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
     }
 
     private fun setUpListeners() {
@@ -74,9 +64,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.profileImageUploadButton.setOnClickListener {
-            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            gallery.type = "image/*"
-            startActivityForResult(gallery, PICK_IMAGE_CODE)
+            onRequestPermission()
         }
 
         binding.dateOfBirthEditText.setOnFocusChangeListener { v, hasFocus ->
@@ -87,11 +75,44 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            viewModel.setProfileImageFile(data?.data)
+    private fun onRequestPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                openPhotoGallery()
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) -> {
+                requestPermissionWithExplanation()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
         }
+    }
+
+    private fun openPhotoGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryIntent.type = "image/*"
+        pickImageLauncher.launch(galleryIntent)
+    }
+
+    private fun requestPermissionWithExplanation() {
+        Snackbar.make(
+            binding.root,
+            getString(R.string.write_files_permission_required),
+            Snackbar.LENGTH_INDEFINITE,
+        ).setAction("OK") {
+            requestPermissionLauncher.launch(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }.show()
     }
 
     private fun setUpObservers() {

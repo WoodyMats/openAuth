@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.woodymats.openauth.databases.AppDatabase
+import com.woodymats.openauth.models.local.UserEntity
 import com.woodymats.openauth.repositories.UserRepository
 import com.woodymats.openauth.utils.ApiCallStatus
 import kotlinx.coroutines.launch
@@ -18,12 +19,16 @@ class MainActivityViewModel(
     private val preferences: SharedPreferences
 ) : ViewModel() {
 
-    private val repository: UserRepository = UserRepository()
+    private val repository: UserRepository = UserRepository(database)
 
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()
 
     val callStatus: LiveData<ApiCallStatus>
         get() = _callStatus
+
+    private var _user: MutableLiveData<UserEntity> = MutableLiveData(null)
+    val user: LiveData<UserEntity>
+        get() = _user
 
     fun logoutUser() {
         viewModelScope.launch {
@@ -41,6 +46,12 @@ class MainActivityViewModel(
             } catch (e: Exception) {
                 _callStatus.value = ApiCallStatus.NOINTERNETERROR
             }
+        }
+    }
+
+    fun refreshUser() {
+        viewModelScope.launch {
+            _user.value = repository.getUser()
         }
     }
 }

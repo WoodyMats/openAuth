@@ -1,5 +1,7 @@
 package com.woodymats.openauth.utils
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -27,26 +29,26 @@ fun customFocusChangeListener(view: View, focusChangeListener: View.OnFocusChang
     view.onFocusChangeListener = focusChangeListener
 }
 
-@BindingAdapter("enrollmentData")
+@BindingAdapter("listData")
 fun bindEnrollmentsRecyclerView(recyclerView: RecyclerView, data: List<Enrollment>?) {
     val adapter = recyclerView.adapter as MyCoursesAdapter
     adapter.submitList(data)
 }
 
-@BindingAdapter("coursesData")
+@BindingAdapter("listData")
 fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<Course>?) {
     val adapter = recyclerView.adapter as AllCoursesAdapter
     adapter.submitList(data)
 }
 
-@BindingAdapter("chaptersData")
+@BindingAdapter("listData")
 fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<ChapterEntity>?) {
     val adapter = recyclerView.adapter as ChaptersAdapter
     val sortedList = data?.sortedBy { it.order }
     adapter.submitList(sortedList)
 }
 
-@BindingAdapter("chaptersData")
+@BindingAdapter("listData")
 fun bindContentsRecyclerView(recyclerView: RecyclerView, data: List<ContentEntity>?) {
     val adapter = recyclerView.adapter as CourseContentsListAdapter
     val sortedList = data?.sortedBy { it.order }
@@ -59,7 +61,7 @@ fun bindContentsRecyclerView(recyclerView: RecyclerView, data: List<ContentEntit
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
-        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+        val imgUri = imgUrl.toUri() //.buildUpon().scheme("http").build()
         Glide.with(imgView.context)
             .load(imgUri)
             .apply(
@@ -67,6 +69,13 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
                 .placeholder(R.drawable.loading_animation)
                 .error(R.drawable.ic_broken_image))
             .into(imgView)
+    }
+}
+
+@BindingAdapter("isContentCompleted")
+fun changeTintColorInContentCompleted(imageView: ImageView, completed: Int) {
+    if (completed == 1) {
+        imageView.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN)
     }
 }
 

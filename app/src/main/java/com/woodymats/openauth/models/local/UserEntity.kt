@@ -25,5 +25,8 @@ data class UserEntity(
     var token: String = "",
 
     @ColumnInfo(name = "canCreateCourses")
-    var canCreateCourses: Int = 0
+    var canCreateCourses: Int = 0,
+
+    @ColumnInfo(name = "dateOfBirth")
+    var dateOfBirth: Long = 0L
 )

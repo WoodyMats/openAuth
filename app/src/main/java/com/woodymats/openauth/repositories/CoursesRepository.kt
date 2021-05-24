@@ -50,6 +50,8 @@ class CoursesRepository(private val database: AppDatabase) {
 
     suspend fun getChapterContentsList(chapterId: Long): List<ContentEntity> = database.courseDAO.getChapterContents(chapterId)
 
+    suspend fun setContentAsCompleted(id: Long): Int = database.courseDAO.setContentAsCompleted(id)
+
     private fun mapToCourseEntity(networkEntity: CourseNetworkEntity): CourseEntity {
         return CourseEntity(
             id = networkEntity.id,
@@ -116,4 +118,5 @@ class CoursesRepository(private val database: AppDatabase) {
             emptyList()
         }
     }
+
 }

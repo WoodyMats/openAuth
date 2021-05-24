@@ -14,8 +14,6 @@ import com.woodymats.openauth.adapters.CourseContentsListAdapter
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.FragmentCourseContentsListBinding
 import com.woodymats.openauth.models.local.ContentEntity
-import com.woodymats.openauth.ui.courseContentView.CourseContentSharedViewModel
-import com.woodymats.openauth.ui.courseContentView.CourseContentViewModelFactory
 import com.woodymats.openauth.utils.PREFERENCES
 
 /**
@@ -38,10 +36,11 @@ class CourseContentsListFragment : Fragment(), ContentsRecyclerViewClickListener
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCourseContentsListBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        viewModel.setChapterId(chapterId)
         return binding.root
     }
 
@@ -69,11 +68,11 @@ class CourseContentsListFragment : Fragment(), ContentsRecyclerViewClickListener
     }
 
     private fun setUpViewModel() {
-        val viewModelFactory = CourseContentViewModelFactory(
+        val viewModelFactory = CourseContentSharedViewModelFactory(
             fragmentContext!!.getSharedPreferences(
                 PREFERENCES,
                 Context.MODE_PRIVATE
-            ), getInstance(fragmentContext!!), chapterId
+            ), getInstance(fragmentContext!!)
         )
         viewModel = ViewModelProvider(
             requireActivity(),
@@ -82,7 +81,12 @@ class CourseContentsListFragment : Fragment(), ContentsRecyclerViewClickListener
     }
 
     override fun onContentItemClicked(view: View, content: ContentEntity) {
-        val action = CourseContentsListFragmentDirections.actionCourseContentsListFragmentToCourseContentFragment(content.title, content.chapterId)
+        viewModel.setContentAsCompleted(content.id)
+        val action =
+            CourseContentsListFragmentDirections.actionCourseContentsListFragmentToCourseContentFragment(
+                content.title,
+                content.chapterId
+            )
         findNavController().navigate(action)
     }
 }

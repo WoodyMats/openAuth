@@ -1,4 +1,4 @@
-package com.woodymats.openauth.ui.courseContentView
+package com.woodymats.openauth.ui.courseContentsList
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
@@ -15,8 +15,7 @@ import kotlinx.coroutines.launch
 
 class CourseContentSharedViewModel(
     private val preferences: SharedPreferences,
-    private val database: AppDatabase,
-    private val chapterId: Long
+    private val database: AppDatabase
 ) : ViewModel() {
 
     private var userToken = preferences.getString(USER_TOKEN, "").toString()
@@ -25,6 +24,16 @@ class CourseContentSharedViewModel(
     private var _chapter: MutableLiveData<ChapterEntity> = MutableLiveData(null)
     val chapter: LiveData<ChapterEntity>
         get() = _chapter
+
+    private var _chapterId: MutableLiveData<Long> = MutableLiveData(-1L)
+    val chapterId: LiveData<Long>
+        get() = _chapterId
+    fun setChapterId(chapterId: Long) {
+        _chapterId.value = chapterId
+        if (_chapterId.value != -1L) {
+            getChapterAndContentsFromCache()
+        }
+    }
 
     private var _contentsList: MutableLiveData<List<ContentEntity>> = MutableLiveData(emptyList())
     val contentsList: LiveData<List<ContentEntity>>
@@ -45,9 +54,7 @@ class CourseContentSharedViewModel(
         get() = _showLoadingBar
 
     init {
-        showLoader()
         getChapterAndContentsFromCache()
-        hideLoader()
     }
 
     private fun showLoader() {
@@ -59,13 +66,15 @@ class CourseContentSharedViewModel(
     }
 
     private fun getChapterAndContentsFromCache() {
+        showLoader()
         viewModelScope.launch {
-            _chapter.value = repository.getChapterById(chapterId)
-            _contentsList.value = repository.getChapterContentsList(chapterId)
+            _chapter.value = repository.getChapterById(chapterId.value ?: -1L)
+            _contentsList.value = repository.getChapterContentsList(chapterId.value ?: -1L)
             if (_contentsList.value!!.isNotEmpty()) {
                 _currentContent.value = _contentsList.value!![currentContentPosition.value ?: 0]
             }
         }
+        hideLoader()
     }
 
     fun goToNextContent() {
@@ -82,4 +91,9 @@ class CourseContentSharedViewModel(
         }
     }
 
+    fun setContentAsCompleted(id: Long) {
+        viewModelScope.launch {
+            repository.setContentAsCompleted(id)
+        }
+    }
 }

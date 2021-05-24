@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,9 +21,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.ActivityMainBinding
+import com.woodymats.openauth.databinding.NavHeaderMainBinding
 import com.woodymats.openauth.ui.login.LoginActivity
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.PREFERENCES
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navHeaderMainBinding: NavHeaderMainBinding
     private lateinit var viewModel: MainActivityViewModel
 
     private val TAG = "MainActivity"
@@ -48,6 +48,10 @@ class MainActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
+        navHeaderMainBinding = NavHeaderMainBinding.inflate(layoutInflater, binding.navView, false)
+        navView.addHeaderView(navHeaderMainBinding.root)
+        navHeaderMainBinding.viewModel = viewModel
+        navHeaderMainBinding.lifecycleOwner = this
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
@@ -60,8 +64,10 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.courseDetailsFragment -> {
-                    toolbar.visibility = GONE
+                R.id.courseDetailsFragment -> toolbar.visibility = GONE
+                R.id.nav_home -> {
+                    toolbar.visibility = VISIBLE
+                    viewModel.refreshUser()
                 }
                 else -> toolbar.visibility = VISIBLE
             }
@@ -137,8 +143,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
+        // menuInflater.inflate(R.menu.main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return false
     }
 
     override fun onSupportNavigateUp(): Boolean {

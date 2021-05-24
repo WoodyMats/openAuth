@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.FragmentCourseContentBinding
+import com.woodymats.openauth.ui.courseContentsList.CourseContentSharedViewModel
+import com.woodymats.openauth.ui.courseContentsList.CourseContentSharedViewModelFactory
 import com.woodymats.openauth.utils.PREFERENCES
 
 class CourseContentFragment : Fragment() {
@@ -54,11 +56,11 @@ class CourseContentFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        val viewModelFactory = CourseContentViewModelFactory(
+        val viewModelFactory = CourseContentSharedViewModelFactory(
             fragmentContext!!.getSharedPreferences(
                 PREFERENCES,
                 Context.MODE_PRIVATE
-            ), getInstance(fragmentContext!!), contentId
+            ), getInstance(fragmentContext!!)
         )
         viewModel = ViewModelProvider(
             requireActivity(),
@@ -77,6 +79,8 @@ class CourseContentFragment : Fragment() {
                     binding.webView.settings.loadWithOverviewMode = true
                     binding.webView.settings.useWideViewPort = true
                     binding.webView.settings.setSupportZoom(true)
+                    binding.webView.settings.builtInZoomControls = true
+                    binding.webView.settings.displayZoomControls = false
                     // "<style>*{display: inline;height: auto;max-width: 100%;}</style><div class=\"body\">" +
                     binding.webView.loadDataWithBaseURL(
                         null,

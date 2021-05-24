@@ -39,7 +39,7 @@
                 app:toolbarId="@id/toolbar">
 
                 <ImageView
-                    android:id="@+id/courseImage"
+                    android:id="@+id/courseImageView"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     imageUrl="@{viewModel.course.courseImage}"
@@ -114,7 +114,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    chaptersData="@{viewModel.course.chapters}"
+                    listData="@{viewModel.course.chapters}"
                     app:layout_constraintTop_toBottomOf="@id/courseDescription"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />

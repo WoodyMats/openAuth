@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.woodymats.openauth.models.local.UserEntity
-import org.jetbrains.annotations.NotNull
 
 @Dao
 interface UserDAO {
@@ -21,6 +20,6 @@ interface UserDAO {
     @Delete
     suspend fun deleteUser(user: UserEntity)
 
-    @Query("SELECT * FROM user_table WHERE email = :email ")
-    suspend fun getUser(@NotNull email: String): UserEntity
+    @Query("SELECT * FROM user_table")
+    suspend fun getUser(): UserEntity
 }

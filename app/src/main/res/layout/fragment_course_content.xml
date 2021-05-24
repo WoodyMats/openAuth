@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.woodymats.openauth.ui.courseContentView.CourseContentSharedViewModel" />
+            type="com.woodymats.openauth.ui.courseContentsList.CourseContentSharedViewModel" />
 
     </data>
 

@@ -56,6 +56,9 @@ interface CourseDAO {
     @Query("SELECT * FROM chapters_table WHERE chapterId == :chapterId")
     suspend fun getChapterById(chapterId: Long): ChapterEntity
 
-    @Query("SELECT * FROM contents_table WHERE chapter_id == :chapterId")
+    @Query("SELECT * FROM contents_table WHERE chapter_id == :chapterId ORDER BY `order`")
     suspend fun getChapterContents(chapterId: Long): List<ContentEntity>
+
+    @Query("UPDATE contents_table SET completed = 1 WHERE id == :contentId")
+    suspend fun setContentAsCompleted(contentId: Long): Int
 }

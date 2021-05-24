@@ -17,6 +17,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface ApiCallsInterface {
 
@@ -59,5 +60,24 @@ interface ApiCallsInterface {
         @Part("password") password: RequestBody,
         @Part("dateOfBirth") dateOfBirth: RequestBody,
         @Part("canCreateCourses") canCreateCourses: RequestBody,
-        ): JsonObject
+    ): JsonObject
+
+    @Multipart
+    @POST("updateUser")
+    suspend fun updateUserWithFile(
+        @Header("Authorization") token: String,
+        @Part file: MultipartBody.Part,
+        @Part("firstName") firstName: RequestBody,
+        @Part("lastName") lastName: RequestBody,
+        @Part("dateOfBirth") dateOfBirth: RequestBody
+    ): UserEntity
+
+    @POST("updateUser")
+    suspend fun updateUserWithoutFile(
+        @Header("Authorization") token: String,
+        @Query("firstName") firstName: String,
+        @Query("lastName") lastName: String,
+        @Query("dateOfBirth") dateOfBirth: Long
+    ): UserEntity
+
 }

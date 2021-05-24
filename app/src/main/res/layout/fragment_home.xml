@@ -83,7 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:transitionGroup="true"
-                    coursesData="@{viewModel.courses}"
+                    listData="@{viewModel.courses}"
                     android:layout_marginTop="8dp" />
 
             </LinearLayout>
@@ -119,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:transitionGroup="true"
-                    enrollmentData="@{viewModel.enrollments}"
+                    listData="@{viewModel.enrollments}"
                     android:orientation="horizontal"
                     android:layout_marginTop="8dp" />
 

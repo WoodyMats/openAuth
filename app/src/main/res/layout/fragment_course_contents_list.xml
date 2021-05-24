@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.woodymats.openauth.ui.courseContentView.CourseContentSharedViewModel" />
+            type="com.woodymats.openauth.ui.courseContentsList.CourseContentSharedViewModel" />
 
     </data>
 
@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="LinearLayoutManager"
-            chaptersData="@{viewModel.contentsList}"
+            listData="@{viewModel.contentsList}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

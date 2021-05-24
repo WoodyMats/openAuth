@@ -43,5 +43,9 @@
     <string name="already_enrolled">You have already enrolled to this course</string>
     <string name="upload_a_profile_image">Upload a profile image… (Up to: 2MB)</string>
     <string name="menu_profile">My Profile</string>
+    <string name="write_files_permission_required">Files permission is required to pick a profile image</string>
+    <string name="save">Save</string>
+    <string name="error_fetching_image_from_gallery">Error fetching image from gallery</string>
+    <string name="error_to_identify_user">Could not identify user</string>
 
 </resources>

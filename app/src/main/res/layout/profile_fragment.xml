@@ -1,13 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.woodymats.openauth.ui.profile.ProfileViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".ui.profile.ProfileFragment">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:foregroundGravity="center"
+                android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toTopOf="@id/fieldsConstraint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/replaceImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_image_replace"
+                android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
+                app:layout_constraintStart_toEndOf="@+id/profileImageView"
+                app:layout_constraintTop_toTopOf="@+id/profileImageView" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:srcCompat="@drawable/logo"
+                android:layout_marginTop="24dp"
+                android:adjustViewBounds="true"
+                android:clickable="@{viewModel.editMode}"
+                imageUrl="@{viewModel.user.profileImage}"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ProfileImageShape"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:textAlignment="center"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:text="@{viewModel.user.email}"
+                app:layout_constraintTop_toBottomOf="@id/profileImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fieldsConstraint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fistNameEditTextLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginStart="32dp"
+                    android:hint="@string/first_name"
+                    app:errorEnabled="true"
+                    android:enabled="@{viewModel.editMode}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fistNameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="@{viewModel.user.firstName}"
+                        customFocusChangeListener="@{viewModel.firstNameFocusChangeListener}"
+                        app:addTextChangedListener="@{viewModel.firstNameTextWatcher}"
+                        app:errorEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lastNameEditTextLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/last_name"
+                    app:errorEnabled="true"
+                    android:enabled="@{viewModel.editMode}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintEnd_toEndOf="@+id/fistNameEditTextLayout"
+                    app:layout_constraintStart_toStartOf="@+id/fistNameEditTextLayout"
+                    app:layout_constraintTop_toBottomOf="@id/fistNameEditTextLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lastNameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="@{viewModel.user.lastName}"
+                        customFocusChangeListener="@{viewModel.lastNameFocusChangeListener}"
+                        app:addTextChangedListener="@{viewModel.lastNameTextWatcher}"
+                        app:errorEnabled="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateOfBirthEditTextLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:focusableInTouchMode="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:hint="@string/date_format"
+                    app:startIconDrawable="@drawable/calendar"
+                    android:enabled="@{viewModel.editMode}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintEnd_toEndOf="@+id/lastNameEditTextLayout"
+                    app:layout_constraintStart_toStartOf="@+id/lastNameEditTextLayout"
+                    app:layout_constraintTop_toBottomOf="@id/lastNameEditTextLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dateOfBirthEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.showDateOfBirth}"
+                        app:addTextChangedListener="@{viewModel.dateOfBirthTextWatcher}"
+                        android:cursorVisible="false"
+                        android:inputType="date" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/updateUserButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/save"
+                    android:onClick="@{viewModel.onSaveButtonClicked}"
+                    style="@style/TextAppearance.OpenAuth.Button"
+                    android:visibility="@{viewModel.editMode ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="@+id/lastNameEditTextLayout"
+                    app:layout_constraintEnd_toEndOf="@+id/lastNameEditTextLayout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateOfBirthEditTextLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

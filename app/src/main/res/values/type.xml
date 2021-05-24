@@ -70,7 +70,7 @@
     </style>
 
     <style name="TextAppearance.OpenAuth.Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <!--Your custom type style here-->
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="TextAppearance.OpenAuth.Body2" parent="TextAppearance.MaterialComponents.Body2">
