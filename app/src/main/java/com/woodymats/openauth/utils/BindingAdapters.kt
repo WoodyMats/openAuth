@@ -3,7 +3,6 @@ package com.woodymats.openauth.utils
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.View
-import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -89,10 +88,18 @@ fun changeTintColorInContentCompleted(imageView: ImageView, completed: Int) {
     }
 }
 
-@BindingAdapter("showOnlyWhenEmpty")
+@BindingAdapter("showOnlyWhenNotEmpty")
 fun View.showOnlyWhenIsNotEmpty(data: List<Any>?) {
     visibility = when {
         data == null || data.isEmpty() -> View.GONE
         else -> View.VISIBLE
+    }
+}
+
+@BindingAdapter("showOnlyWhenEmpty")
+fun View.showOnlyWhenIsEmpty(data: List<Any>?) {
+    visibility = when {
+        data == null || data.isEmpty() -> View.VISIBLE
+        else -> View.GONE
     }
 }

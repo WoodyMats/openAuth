@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.woodymats.openauth.databases.AppDatabase
+import com.woodymats.openauth.models.ChapterWithContents
 import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.repositories.CoursesRepository
@@ -28,6 +29,11 @@ class CourseDetailsViewModel(
     private var _course: MutableLiveData<CourseEntity> = MutableLiveData(null)
     val course: LiveData<CourseEntity>
         get() = _course
+
+    private var _chaptersWithContents: MutableLiveData<List<ChapterWithContents>> =
+        MutableLiveData(null)
+    val chaptersWithContents: LiveData<List<ChapterWithContents>>
+        get() = _chaptersWithContents
 
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()
     val callStatus: LiveData<ApiCallStatus>
@@ -53,10 +59,15 @@ class CourseDetailsViewModel(
         _showLoadingBar.value = false
     }
 
+    private suspend fun setChaptersWithContents() {
+        _chaptersWithContents.value = repository.getChaptersWithContentsList(_course.value?.id ?: -1L)
+    }
+
     private fun getCourseFromCache() {
         viewModelScope.launch {
             _course.value =
                 repository.getCourseById(courseId)
+            setChaptersWithContents()
         }
     }
 
@@ -64,11 +75,26 @@ class CourseDetailsViewModel(
         enrollToCourse()
     }
 
+    fun isContentsAreEmpty(): Boolean {
+        if (_chaptersWithContents.value.isNullOrEmpty()) {
+            return true
+        } else {
+            for (chapter in _chaptersWithContents.value!!) {
+                if (chapter.contents.isNullOrEmpty()) {
+                    return true
+                }
+            }
+            return false
+        }
+    }
+
     private fun enrollToCourse() {
         viewModelScope.launch {
             try {
                 showLoader()
-                repository.enrollToCourse(userToken, EnrollToCourseModel(courseId = courseId))
+                _course.value =
+                    repository.enrollToCourse(userToken, EnrollToCourseModel(courseId = courseId))
+                setChaptersWithContents()
                 _callStatus.value = ApiCallStatus.SUCCESS
             } catch (e: HttpException) {
                 when (e.code()) {
@@ -80,11 +106,12 @@ class CourseDetailsViewModel(
             } catch (e: Exception) {
                 _callStatus.value = ApiCallStatus.NOINTERNETERROR
             }
+            _callStatus.value = null
             hideLoader()
         }
     }
 
-    fun hideEnrollLinear() {
-        _hideEnrollLinear.value = true
+    fun hideEnrollLinear(hide: Boolean) {
+        _hideEnrollLinear.value = hide
     }
 }

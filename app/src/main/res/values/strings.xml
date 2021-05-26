@@ -47,5 +47,7 @@
     <string name="save">Save</string>
     <string name="error_fetching_image_from_gallery">Error fetching image from gallery</string>
     <string name="error_to_identify_user">Could not identify user</string>
+    <string name="have_to_enroll_to_course">You have to enroll to course in order to have access to it\'s contents</string>
+    <string name="no_contents_for_this_course_yet">No contents for this course yet!</string>
 
 </resources>

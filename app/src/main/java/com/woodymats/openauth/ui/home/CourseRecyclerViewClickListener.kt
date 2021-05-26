@@ -5,5 +5,5 @@ import com.woodymats.openauth.models.local.CourseEntity
 
 interface CourseRecyclerViewClickListener {
 
-    fun onCourseItemClicked(view: View, course: CourseEntity)
+    fun onCourseItemClicked(view: View, course: CourseEntity, hideBottomBar: Boolean)
 }

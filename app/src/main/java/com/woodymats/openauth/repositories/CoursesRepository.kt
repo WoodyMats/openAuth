@@ -1,6 +1,7 @@
 package com.woodymats.openauth.repositories
 
 import com.woodymats.openauth.databases.AppDatabase
+import com.woodymats.openauth.models.ChapterWithContents
 import com.woodymats.openauth.models.local.ChapterEntity
 import com.woodymats.openauth.models.remote.ChapterNetworkEntity
 import com.woodymats.openauth.models.Course
@@ -10,12 +11,27 @@ import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.models.Enrollment
 import com.woodymats.openauth.models.local.ContentEntity
 import com.woodymats.openauth.models.remote.ContentNetworkEntity
+import com.woodymats.openauth.models.remote.EnrollmentNetworkEntity
 import com.woodymats.openauth.network.RetrofitClient
 
 class CoursesRepository(private val database: AppDatabase) {
 
-    suspend fun getUserEnrollmentsFromServer(userToken: String?, userId: Long): List<Enrollment> {
-        val enrollments = RetrofitClient.apiInterface.getUserEnrollments(userToken!!)
+    suspend fun downloadUserEnrollmentsAndGetThemFromCache(userToken: String?, userId: Long): List<Enrollment> {
+        val enrollments = downloadUserEnrollmentsFromServer(userToken)
+        insertUserEnrollmentsIntoDatabase(enrollments, userId)
+        return getUserEnrollmentsFromCache(userId)
+    }
+
+    suspend fun downloadUserEnrollmentsFromServer(userToken: String?): List<EnrollmentNetworkEntity> {
+        return RetrofitClient.apiInterface.getUserEnrollments(userToken!!)
+    }
+
+    suspend fun isCoursesTableEmpty(): Boolean {
+        val rows = database.courseDAO.getCourseRows()
+        return (rows < 1)
+    }
+
+    suspend fun insertUserEnrollmentsIntoDatabase(enrollments: List<EnrollmentNetworkEntity>, userId: Long) {
         for (enrollment in enrollments) {
             val enrollmentDatabase = Enrollment(
                 mapToCourseEntity(enrollment.course, userId),
@@ -23,23 +39,38 @@ class CoursesRepository(private val database: AppDatabase) {
             )
             database.courseDAO.insertEnrollment(enrollmentDatabase)
         }
-        return getUserEnrollmentsFromCache(userId)
     }
 
     suspend fun getUserEnrollmentsFromCache(userId: Long): List<Enrollment> =
         database.courseDAO.getUserEnrollments(userId)
 
-    suspend fun getAllCourses(userToken: String?): List<CourseEntity> {
-        val courses = RetrofitClient.apiInterface.getAllCourses(userToken!!)
+    suspend fun downloadAllCoursesAndGetThemFromCache(userToken: String?): List<CourseEntity> {
+        val courses = getAllCoursesFromServer(userToken)
+        insertDownloadedCoursesIntoDatabase(courses)
+        return getAllCoursesFromCache()
+    }
+
+    suspend fun getAllCoursesFromServer(userToken: String?): List<CourseNetworkEntity> {
+        return RetrofitClient.apiInterface.getAllCourses(userToken ?: "")
+    }
+
+    suspend fun insertDownloadedCoursesIntoDatabase(courses: List<CourseNetworkEntity>) {
         for (course in courses) {
             val tempCourse = Course(mapToCourseEntity(course), mapToChapterListEntity(course.chapters))
             database.courseDAO.insertCourse(tempCourse)
         }
-        return getAllCoursesFromCache()
     }
 
-    suspend fun enrollToCourse(token: String, enrollToCourseModel: EnrollToCourseModel) {
-        RetrofitClient.apiInterface.enrollToCourse(token, enrollToCourseModel)
+    suspend fun clearCourseChaptersAnContentsTables() {
+        database.courseDAO.deleteAllContents()
+        database.courseDAO.deleteAllChapters()
+        database.courseDAO.deleteAllCourses()
+    }
+
+    suspend fun enrollToCourse(token: String, enrollToCourseModel: EnrollToCourseModel): CourseEntity {
+        val chaptersFromNetworkResponse = RetrofitClient.apiInterface.enrollToCourse(token, enrollToCourseModel)
+        database.courseDAO.insertChaptersWithContents(mapToChapterListEntity(chaptersFromNetworkResponse))
+        return database.courseDAO.getCourseById(enrollToCourseModel.courseId)
     }
 
     suspend fun getCourseById(courseId: Long): CourseEntity = database.courseDAO.getCourseById(courseId)
@@ -119,4 +150,7 @@ class CoursesRepository(private val database: AppDatabase) {
         }
     }
 
+    suspend fun getChaptersWithContentsList(courseId: Long): List<ChapterWithContents> {
+        return database.courseDAO.getCourseChaptersWithContents(courseId)
+    }
 }

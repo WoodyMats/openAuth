@@ -15,6 +15,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/noContentsTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:padding="16dp"
+            showOnlyWhenEmpty="@{viewModel.contentsList}"
+            android:text="@string/no_contents_for_this_course_yet"
+            android:textAppearance="@style/TextAppearance.OpenAuth.Headline6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/contentsRecyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contentsRecyclerView"
             android:layout_width="0dp"

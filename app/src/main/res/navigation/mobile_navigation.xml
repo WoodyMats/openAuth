@@ -27,6 +27,10 @@
         <action
             android:id="@+id/action_courseDetailsFragment_to_courseContentsListFragment"
             app:destination="@id/courseContentsListFragment" />
+        <argument
+            android:name="hideBottomBar"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/courseContentFragment"

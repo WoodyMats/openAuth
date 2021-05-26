@@ -7,6 +7,7 @@ import com.woodymats.openauth.models.remote.EnrollmentNetworkEntity
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.SignUpEntity
 import com.woodymats.openauth.models.local.UserEntity
+import com.woodymats.openauth.models.remote.ChapterNetworkEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -46,7 +47,7 @@ interface ApiCallsInterface {
     suspend fun enrollToCourse(
         @Header("Authorization") token: String,
         @Body enrollToCourseModel: EnrollToCourseModel
-    )
+    ): List<ChapterNetworkEntity>
 
     // @JvmSuppressWildcards
     @Multipart

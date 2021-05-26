@@ -29,6 +29,7 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
     private var fragmentContext: Context? = null
     private val args: CourseDetailsFragmentArgs by navArgs()
     private val courseId: Long by lazy(LazyThreadSafetyMode.NONE) { args.courseId }
+    private val hideBottomBar: Boolean by lazy(LazyThreadSafetyMode.NONE) { args.hideBottomBar }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,11 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentCourseDetailsBinding.inflate(layoutInflater)
         setUpViewModel()
         setUpRecyclerView()
@@ -53,7 +58,8 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
 
     private fun setUpRecyclerView() {
         binding.chaptersRecyclerView.also {
-            it.layoutManager = LinearLayoutManager(fragmentContext, LinearLayoutManager.VERTICAL, false)
+            it.layoutManager =
+                LinearLayoutManager(fragmentContext, LinearLayoutManager.VERTICAL, false)
             it.adapter = ChaptersAdapter(this)
         }
     }
@@ -61,6 +67,7 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpListeners()
+        viewModel.hideEnrollLinear(hideBottomBar)
     }
 
     override fun onAttach(context: Context) {
@@ -75,9 +82,16 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
 
     private fun setUpViewModel() {
         binding.lifecycleOwner = this
-        val viewModelFactory = CourseDetailsViewModelFactory(fragmentContext!!.getSharedPreferences(PREFERENCES, MODE_PRIVATE), getInstance(fragmentContext!!), courseId)
-        binding.viewModel = ViewModelProvider(this, viewModelFactory).get(CourseDetailsViewModel::class.java)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(CourseDetailsViewModel::class.java)
+        val viewModelFactory = CourseDetailsViewModelFactory(
+            fragmentContext!!.getSharedPreferences(
+                PREFERENCES,
+                MODE_PRIVATE
+            ), getInstance(fragmentContext!!), courseId
+        )
+        binding.viewModel =
+            ViewModelProvider(this, viewModelFactory).get(CourseDetailsViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(CourseDetailsViewModel::class.java)
     }
 
     private fun setUpObservers() {
@@ -101,14 +115,17 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
                     Snackbar.LENGTH_LONG
                 ).show()
 
-                ApiCallStatus.SERVERERROR -> Snackbar.make(
-                    binding.root,
-                    R.string.already_enrolled,
-                    Snackbar.LENGTH_LONG
-                ).show()
+                ApiCallStatus.SERVERERROR -> {
+                    viewModel.hideEnrollLinear(true)
+                    Snackbar.make(
+                        binding.root,
+                        R.string.already_enrolled,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
 
                 ApiCallStatus.SUCCESS -> {
-                    viewModel.hideEnrollLinear()
+                    viewModel.hideEnrollLinear(true)
                     Snackbar.make(
                         binding.root,
                         getString(R.string.enrolled_to_course, viewModel.course.value!!.title),
@@ -126,7 +143,19 @@ class CourseDetailsFragment : Fragment(), ChaptersRecyclerViewClickListener {
     }
 
     override fun onChapterItemClicked(view: View, chapter: ChapterEntity) {
-        val action = CourseDetailsFragmentDirections.actionCourseDetailsFragmentToCourseContentsListFragment(chapter.title, chapter.chapterId)
-        findNavController().navigate(action)
+        if (!viewModel.isContentsAreEmpty() || binding.enrollToCourseBottomBar.visibility == View.GONE) {
+            val action =
+                CourseDetailsFragmentDirections.actionCourseDetailsFragmentToCourseContentsListFragment(
+                    chapter.title,
+                    chapter.chapterId
+                )
+            findNavController().navigate(action)
+        } else {
+            Snackbar.make(
+                binding.root,
+                R.string.have_to_enroll_to_course,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
 }
