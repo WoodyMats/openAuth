@@ -27,7 +27,7 @@ class MyCoursesAdapter(private val listener: CourseRecyclerViewClickListener): /
 
     override fun onBindViewHolder(holder: MyCourseViewHolder, position: Int) {
         holder.adapterCourseCardItemAdapterBinding.course = getItem(position).course
-        holder.adapterCourseCardItemAdapterBinding.root.setOnClickListener { listener.onCourseItemClicked(it, getItem(position).course) }
+        holder.adapterCourseCardItemAdapterBinding.root.setOnClickListener { listener.onCourseItemClicked(it, getItem(position).course, true) }
         holder.adapterCourseCardItemAdapterBinding.executePendingBindings()
     }
 

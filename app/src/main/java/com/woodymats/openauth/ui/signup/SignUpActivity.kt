@@ -1,7 +1,16 @@
 package com.woodymats.openauth.ui.signup
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -21,6 +30,23 @@ class SignUpActivity : AppCompatActivity() {
     private val viewModel: SignUpViewModel by lazy {
         ViewModelProvider(this).get(SignUpViewModel::class.java)
     }
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                openPhotoGallery()
+            } else {
+                requestPermissionWithExplanation()
+            }
+        }
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val resultIntent = result.data
+                viewModel.setProfileImageFile(resultIntent?.data)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +63,10 @@ class SignUpActivity : AppCompatActivity() {
             hideKeyboard(it)
         }
 
+        binding.profileImageUploadButton.setOnClickListener {
+            onRequestPermission()
+        }
+
         binding.dateOfBirthEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 showDatePicker()
@@ -45,7 +75,53 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    private fun onRequestPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                openPhotoGallery()
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) -> {
+                requestPermissionWithExplanation()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
+    private fun openPhotoGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryIntent.type = "image/*"
+        pickImageLauncher.launch(galleryIntent)
+    }
+
+    private fun requestPermissionWithExplanation() {
+        Snackbar.make(
+            binding.root,
+            getString(R.string.write_files_permission_required),
+            Snackbar.LENGTH_INDEFINITE,
+        ).setAction("OK") {
+            requestPermissionLauncher.launch(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }.show()
+    }
+
     private fun setUpObservers() {
+        viewModel.profileImageFile.observe(this, {
+            if (it != null) {
+                binding.profileImageUploadButton.text = it.name
+            }
+        })
+
         viewModel.firstNameErrorMessage.observe(this, {
             if (it.isNullOrEmpty()) {
                 binding.fistNameEditTextLayout.error = null

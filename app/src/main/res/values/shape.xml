@@ -49,9 +49,8 @@
     </style>
 
     <!--Shape Appearance overlay for ShapeableImageView -->
-    <style name="ShapeAppearanceOverlay.OpenAuth.Image" parent="">
-        <item name="cornerSize">0dp</item>
-        <item name="cornerSizeTopLeft">50%</item>
+    <style name="ProfileImageShape" parent="">
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>

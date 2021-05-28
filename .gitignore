@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+openAuth.keystore
+OpenAuthReminder.rtf
+/app/release

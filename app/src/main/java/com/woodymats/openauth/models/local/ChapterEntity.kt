@@ -1,4 +1,4 @@
-package com.woodymats.openauth.models
+package com.woodymats.openauth.models.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "chapters_table")
-data class Chapter(
+data class ChapterEntity(
     @PrimaryKey
     var chapterId: Long = 0L,
 
@@ -24,5 +24,11 @@ data class Chapter(
 
     @ColumnInfo(name = "course_id")
     @SerializedName("course_id")
-    var courseId: Int
+    var courseId: Int,
+
+    @ColumnInfo(name = "contents")
+    var contents: List<ContentEntity>,
+
+    @ColumnInfo(name = "progress")
+    val progress: Int = 0
 )

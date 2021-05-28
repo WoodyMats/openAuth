@@ -43,7 +43,7 @@
     <!--Color palette-->
 
     <color name="blue_200">#AAC5D8</color> <!--Color primary (dark)-->
-    <color name="blue_500">#052331</color> <!--Color primary (light)-->
+    <color name="blue_500">#093F59</color> <!--Color primary (light)-->
     <color name="purple_600">#4b01d0</color> <!--Color primary variant (dark)-->
     <color name="purple_700">#3700b3</color> <!--Color primary variant (light)-->
 

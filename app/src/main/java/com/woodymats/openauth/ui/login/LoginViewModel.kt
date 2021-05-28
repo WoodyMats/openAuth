@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.models.LoginEntity
-import com.woodymats.openauth.models.User
+import com.woodymats.openauth.models.local.UserEntity
 import com.woodymats.openauth.repositories.UserRepository
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.hasInternetConnection
@@ -25,9 +25,9 @@ class LoginViewModel(private val app: Application, private val preferences: Shar
 
     private val repository = UserRepository(getInstance(app))
 
-    private var _dataState: MutableLiveData<User> = MutableLiveData()
+    private var _dataState: MutableLiveData<UserEntity> = MutableLiveData()
 
-    val dataState: LiveData<User>
+    val dataState: LiveData<UserEntity>
         get() = _dataState
 
     private val _callStatus: MutableLiveData<ApiCallStatus> = MutableLiveData()

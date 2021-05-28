@@ -1,4 +1,4 @@
-package com.woodymats.openauth.models
+package com.woodymats.openauth.models.remote
 
 data class EnrollmentNetworkEntity(
     val course: CourseNetworkEntity,

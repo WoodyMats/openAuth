@@ -1,11 +1,11 @@
-package com.woodymats.openauth.models
+package com.woodymats.openauth.models.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
-data class User(
+data class UserEntity(
     @PrimaryKey(autoGenerate = false)
     var id: Long = 0L,
 
@@ -25,5 +25,8 @@ data class User(
     var token: String = "",
 
     @ColumnInfo(name = "canCreateCourses")
-    var canCreateCourses: Int = 0
+    var canCreateCourses: Int = 0,
+
+    @ColumnInfo(name = "dateOfBirth")
+    var dateOfBirth: Long = 0L
 )

@@ -22,24 +22,14 @@
             android:layout_height="wrap_content">
 
             <ProgressBar
-                android:id="@+id/myCoursesLoadingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="@{viewModel.showLoadingMyCourses ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="@+id/myCoursesLinear"
-                app:layout_constraintTop_toTopOf="@+id/myCoursesLinear"
-                app:layout_constraintEnd_toEndOf="@+id/myCoursesLinear"
-                app:layout_constraintStart_toStartOf="@+id/myCoursesLinear" />
-
-            <ProgressBar
                 android:id="@+id/allCoursesLoadingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{viewModel.showLoadingAllCourses ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="@+id/allCoursesLinear"
-                app:layout_constraintTop_toTopOf="@+id/allCoursesLinear"
-                app:layout_constraintEnd_toEndOf="@+id/allCoursesLinear"
-                app:layout_constraintStart_toStartOf="@+id/allCoursesLinear" />
+                android:visibility="@{viewModel.showLoader ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coursesSearchBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/coursesSearchBar"
@@ -47,7 +37,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:drawableStart="@drawable/ic_search"
+                android:completionThreshold="1"
                 android:drawablePadding="4dp"
+                listData="@{viewModel.courses}"
                 android:hint="@string/search_course"
                 android:imeOptions="actionSearch"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="8dp"
-                showOnlyWhenEmpty="@{viewModel.courses}"
+                showOnlyWhenNotEmpty="@{viewModel.courses}"
                 app:layout_constraintTop_toBottomOf="@id/coursesSearchBar"
                 app:layout_constraintStart_toStartOf="@+id/coursesSearchBar"
                 app:layout_constraintEnd_toEndOf="@+id/coursesSearchBar">
@@ -83,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:transitionGroup="true"
-                    coursesData="@{viewModel.courses}"
+                    listData="@{viewModel.courses}"
                     android:layout_marginTop="8dp" />
 
             </LinearLayout>
@@ -95,7 +87,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                showOnlyWhenEmpty="@{viewModel.enrollments}"
+                showOnlyWhenNotEmpty="@{viewModel.enrollments}"
                 app:layout_constraintTop_toBottomOf="@id/allCoursesLinear"
                 app:layout_constraintStart_toStartOf="@+id/allCoursesLinear"
                 app:layout_constraintEnd_toEndOf="@+id/allCoursesLinear"
@@ -119,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:transitionGroup="true"
-                    enrollmentData="@{viewModel.enrollments}"
+                    listData="@{viewModel.enrollments}"
                     android:orientation="horizontal"
                     android:layout_marginTop="8dp" />
 

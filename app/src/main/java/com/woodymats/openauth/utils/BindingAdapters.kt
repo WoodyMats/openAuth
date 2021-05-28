@@ -1,5 +1,7 @@
 package com.woodymats.openauth.utils
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
@@ -7,13 +9,17 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.woodymats.openauth.adapters.MyCoursesAdapter
 import com.woodymats.openauth.R
 import com.woodymats.openauth.adapters.AllCoursesAdapter
 import com.woodymats.openauth.adapters.ChaptersAdapter
-import com.woodymats.openauth.models.Chapter
-import com.woodymats.openauth.models.Course
+import com.woodymats.openauth.adapters.CourseContentsListAdapter
+import com.woodymats.openauth.adapters.SearchCoursesAdapter
+import com.woodymats.openauth.models.local.ChapterEntity
 import com.woodymats.openauth.models.Enrollment
+import com.woodymats.openauth.models.local.ContentEntity
+import com.woodymats.openauth.models.local.CourseEntity
 
 @BindingAdapter("loadingInProcess")
 fun showLoading(view: View, loadingInProcess: Boolean) {
@@ -25,21 +31,35 @@ fun customFocusChangeListener(view: View, focusChangeListener: View.OnFocusChang
     view.onFocusChangeListener = focusChangeListener
 }
 
-@BindingAdapter("enrollmentData")
+@BindingAdapter("listData")
 fun bindEnrollmentsRecyclerView(recyclerView: RecyclerView, data: List<Enrollment>?) {
     val adapter = recyclerView.adapter as MyCoursesAdapter
     adapter.submitList(data)
 }
 
-@BindingAdapter("coursesData")
-fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<Course>?) {
+@BindingAdapter("listData")
+fun bindSearchCourseAutoCompleteTextView(autoCompleteTextView: MaterialAutoCompleteTextView, data: List<CourseEntity>?) {
+    if (data != null) {
+        autoCompleteTextView.setAdapter(SearchCoursesAdapter(data))
+    }
+}
+
+@BindingAdapter("listData")
+fun bindAllCoursesRecyclerView(recyclerView: RecyclerView, data: List<CourseEntity>?) {
     val adapter = recyclerView.adapter as AllCoursesAdapter
     adapter.submitList(data)
 }
 
-@BindingAdapter("chaptersData")
-fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<Chapter>?) {
+@BindingAdapter("listData")
+fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<ChapterEntity>?) {
     val adapter = recyclerView.adapter as ChaptersAdapter
+    val sortedList = data?.sortedBy { it.order }
+    adapter.submitList(sortedList)
+}
+
+@BindingAdapter("listData")
+fun bindContentsRecyclerView(recyclerView: RecyclerView, data: List<ContentEntity>?) {
+    val adapter = recyclerView.adapter as CourseContentsListAdapter
     val sortedList = data?.sortedBy { it.order }
     adapter.submitList(sortedList)
 }
@@ -50,7 +70,7 @@ fun bindChaptersRecyclerView(recyclerView: RecyclerView, data: List<Chapter>?) {
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
-        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+        val imgUri = imgUrl.toUri() //.buildUpon().scheme("http").build()
         Glide.with(imgView.context)
             .load(imgUri)
             .apply(
@@ -61,10 +81,25 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
-@BindingAdapter("showOnlyWhenEmpty")
+@BindingAdapter("isContentCompleted")
+fun changeTintColorInContentCompleted(imageView: ImageView, completed: Int) {
+    if (completed == 1) {
+        imageView.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN)
+    }
+}
+
+@BindingAdapter("showOnlyWhenNotEmpty")
 fun View.showOnlyWhenIsNotEmpty(data: List<Any>?) {
     visibility = when {
         data == null || data.isEmpty() -> View.GONE
         else -> View.VISIBLE
+    }
+}
+
+@BindingAdapter("showOnlyWhenEmpty")
+fun View.showOnlyWhenIsEmpty(data: List<Any>?) {
+    visibility = when {
+        data == null || data.isEmpty() -> View.VISIBLE
+        else -> View.GONE
     }
 }

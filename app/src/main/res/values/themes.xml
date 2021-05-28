@@ -66,12 +66,13 @@
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
     </style>
     <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorPrimary</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
     </style>
     <style name="Theme.OpenAuth.NoActionBar" parent="Theme.OpenAuth">
         <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/white_50</item>
         <item name="windowNoTitle">true</item>
     </style>
 
