@@ -27,5 +27,8 @@ data class ChapterEntity(
     var courseId: Int,
 
     @ColumnInfo(name = "contents")
-    var contents: List<ContentEntity>
+    var contents: List<ContentEntity>,
+
+    @ColumnInfo(name = "progress")
+    val progress: Int = 0
 )

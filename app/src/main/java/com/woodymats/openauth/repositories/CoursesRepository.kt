@@ -133,7 +133,6 @@ class CoursesRepository(private val database: AppDatabase) {
         return ContentEntity(
             id = contentNetworkEntity.id,
             title = contentNetworkEntity.title,
-            completed = contentNetworkEntity.completed,
             content = contentNetworkEntity.content,
             order = contentNetworkEntity.order,
             chapterId = contentNetworkEntity.chapterId

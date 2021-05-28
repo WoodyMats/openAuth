@@ -29,8 +29,11 @@ import com.woodymats.openauth.R
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.ProfileFragmentBinding
 import com.woodymats.openauth.utils.ApiCallStatus
+import com.woodymats.openauth.utils.getRealPathFromUri
 import com.woodymats.openauth.utils.hideKeyboard
+import java.io.File
 import java.io.IOException
+import java.lang.String
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -59,10 +62,16 @@ class ProfileFragment : Fragment() {
                 viewModel.setProfileImageFile(resultIntent?.data)
                 val updatedProfileImage: Bitmap?
                 try {
-                    updatedProfileImage = BitmapFactory.decodeStream(
-                        fragmentContext!!.contentResolver.openInputStream(resultIntent!!.data!!)
-                    )
-                    binding.profileImageView.setImageBitmap(updatedProfileImage)
+                    val tempFile = File(getRealPathFromUri(resultIntent?.data, fragmentContext!!) ?: "")
+                    val fileSize: Int = String.valueOf(tempFile.length() / 1048576).toInt()
+                    if (fileSize <= 2) {
+                        updatedProfileImage = BitmapFactory.decodeStream(
+                            fragmentContext!!.contentResolver.openInputStream(resultIntent!!.data!!)
+                        )
+                        binding.profileImageView.setImageBitmap(updatedProfileImage)
+                    } else {
+                        Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
+                    }
                 } catch (e: IOException) {
                     e.printStackTrace()
                     Toast.makeText(

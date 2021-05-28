@@ -1,6 +1,7 @@
 package com.woodymats.openauth.ui.courseContentsList
 
 import android.content.SharedPreferences
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -77,14 +78,14 @@ class CourseContentSharedViewModel(
         hideLoader()
     }
 
-    fun goToNextContent() {
-        if ((currentContentPosition.value ?: -1) >= 0 && (currentContentPosition.value ?: -1) <= ((contentsList.value?.size ?: 0) - 1)) {
+    fun goToNextContent(v: View) {
+        if ((currentContentPosition.value ?: -1) >= 0 && (currentContentPosition.value ?: -1) < ((contentsList.value?.size ?: 0) - 1)) {
             currentContentPosition.value =+ 1
             _currentContent.value = _contentsList.value!![currentContentPosition.value ?: 0]
         }
     }
 
-    fun goToPreviousContent() {
+    fun goToPreviousContent(v: View) {
         if ((currentContentPosition.value ?: -1) > 0) {
             currentContentPosition.value =- 1
             _currentContent.value = _contentsList.value!![currentContentPosition.value ?: 0]

@@ -22,7 +22,6 @@
             android:layout_height="75dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/nav_header_desc"
             android:layout_marginTop="32dp"
             android:layout_marginStart="8dp"
             app:shapeAppearanceOverlay="@style/ProfileImageShape"

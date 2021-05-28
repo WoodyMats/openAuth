@@ -2,13 +2,13 @@ package com.woodymats.openauth.ui.courseContentView
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import com.woodymats.openauth.databases.getInstance
 import com.woodymats.openauth.databinding.FragmentCourseContentBinding
 import com.woodymats.openauth.ui.courseContentsList.CourseContentSharedViewModel
@@ -19,8 +19,8 @@ class CourseContentFragment : Fragment() {
 
     private lateinit var viewModel: CourseContentSharedViewModel
     private lateinit var binding: FragmentCourseContentBinding
-    private val args: CourseContentFragmentArgs by navArgs()
-    private val contentId: Long by lazy(LazyThreadSafetyMode.NONE) { args.contentId }
+    // private val args: CourseContentFragmentArgs by navArgs()
+    // private val contentId: Long by lazy(LazyThreadSafetyMode.NONE) { args.contentId }
     private var fragmentContext: Context? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class CourseContentFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCourseContentBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -84,7 +84,7 @@ class CourseContentFragment : Fragment() {
                     // "<style>*{display: inline;height: auto;max-width: 100%;}</style><div class=\"body\">" +
                     binding.webView.loadDataWithBaseURL(
                         null,
-                        setToCenter("img") + setToCenter("iframe") + it.content,
+                        setToCenter("img") + setToCenter("iframe") + setBackgroundByTheme() + it.content + "</body>",
                         "text/html; charset=utf-8",
                         "UTF-8",
                         null
@@ -92,6 +92,21 @@ class CourseContentFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setBackgroundByTheme(): String {
+        val mode = fragmentContext?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
+        return when (mode) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                return "<style>body{display: block; background-color: black; color: white;}</style><body>"
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                "<style>body{display: block; background-color: white; color: black;}</style><body>"
+            }
+            else -> {
+                "<style>body{display: block; background-color: black; color: white;}</style><body>"
+            }
+        }
     }
 
     private fun setToCenter(element: String): String {

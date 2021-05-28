@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpViewModel() {
         val preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        viewModel = MainActivityViewModel(
+        viewModel = MainActivityViewModel(application,
             preferences.getString(USER_TOKEN, "")!!,
             getInstance(baseContext),
             preferences

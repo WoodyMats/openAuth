@@ -2,9 +2,7 @@ package com.woodymats.openauth.ui.profile
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import android.database.Cursor
 import android.net.Uri
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -20,6 +18,7 @@ import com.woodymats.openauth.repositories.UserRepository
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.PREFERENCES
 import com.woodymats.openauth.utils.USER_TOKEN
+import com.woodymats.openauth.utils.getRealPathFromUri
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.File
@@ -39,23 +38,9 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
 
     fun setProfileImageFile(profileImageUri: Uri?) {
         try {
-            val temp = getRealPathFromUri(profileImageUri) ?: ""
-            _profileImageFile.value = File(getRealPathFromUri(profileImageUri) ?: "")
+            _profileImageFile.value = File(getRealPathFromUri(profileImageUri, app) ?: "")
         } catch (e: IOException) {
             // Nothing for now
-        }
-    }
-
-    private fun getRealPathFromUri(contentUri: Uri?): String? {
-        var cursor: Cursor? = null
-        return try {
-            val proj = arrayOf(MediaStore.Images.Media.DATA)
-            cursor = app.contentResolver.query(contentUri!!, proj, null, null, null)
-            val columnIndex: Int = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            cursor.getString(columnIndex)
-        } finally {
-            cursor?.close()
         }
     }
 
@@ -169,7 +154,6 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
         if (!(userToUpdate?.firstName.isNullOrEmpty() || userToUpdate?.lastName.isNullOrEmpty() || userToUpdate?.dateOfBirth == -1L)) {
             clearErrorMessages()
             updateUser()
-            toggleEditMode()
         } else {
             _generalErrorMessage.value = app.getString(R.string.fill_all_fields)
         }
@@ -208,6 +192,7 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
                     )
                     _callStatus.value = ApiCallStatus.SUCCESS
                 }
+                toggleEditMode()
                 hideLoader()
             } catch (e: HttpException) {
                 when (e.code()) {

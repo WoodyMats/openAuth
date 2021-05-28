@@ -15,8 +15,8 @@ android {
         applicationId "com.woodymats.openauth"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 4
-        versionName "0.9"
+        versionCode 5
+        versionName "0.9.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_home">Αρχική</string>
+    <string name="password">Κωδικός</string>
+    <string name="sign_in">Είσοδος</string>
+    <string name="have_not_account">Δεν έχεις λογαριασμό; <u><b>Κάνε εγγραφή</b></u></string>
+    <string name="email_empty">Το email είναι κενό</string>
+    <string name="password_empty">Ο κωδικός είναι κενός</string>
+    <string name="email_invalid">Συμπληρώστε ένα έγκυρο email</string>
+    <string name="unknown_error">Προέκυψε άγνωστο σφάλμα</string>
+    <string name="no_internet_connection">Δεν υπάρχει σύνδεση στο διαδίκτυο</string>
+    <string name="wrong_credentials">Λάθος email ή κωδικός</string>
+    <string name="server_error">Σφάλμα διακομιστή. Προσπαθήστε αργότερα</string>
+    <string name="first_name">Όνομα</string>
+    <string name="last_name">Επίθετο</string>
+    <string name="sign_up">Εγγραφή</string>
+    <string name="fill_all_fields">Συπληρώστε όλα τα πεδία</string>
+    <string name="set_bigger_password">Ο κωδικός πρέπει να περιέχει τουλάχιστον 6 ψηφία</string>
+    <string name="passwords_do_not_match">Οι κωδικοί δεν μοιάζουν</string>
+    <string name="confirm_password">Επιβεβαίωση Κωδικού</string>
+    <string name="date_of_birth">Ημερομηνία Γέννησης</string>
+    <string name="date_format">μήνας/ημέρα/χρονιά</string>
+    <string name="field_required">Αυτό το πεδίο είναι υποχρεωτικό</string>
+    <string name="user_exists">Υπάρχει ήδη χρήστης με αυτό το email</string>
+    <string name="logout">Έξοδος</string>
+    <string name="my_courses_title">Τα μαθήματά μου</string>
+    <string name="all_courses_title">Όλα τα μαθήματα</string>
+    <string name="search_course">Αναζήτηση μαθήματος</string>
+    <string name="description_string">Περιγραφή</string>
+    <string name="enroll_string">Εγγραφή</string>
+    <string name="enrolled_to_course">Εγγραφήκατε στο %1$s</string>
+    <string name="already_enrolled">Είστε ήδη εγγεγραμένος στο μάθημα</string>
+    <string name="upload_a_profile_image">Επιλέξτε εικόνα… (Μέχρι: 2MB)</string>
+    <string name="menu_profile">Το προφίλ μου</string>
+    <string name="write_files_permission_required">Η αποδοχή της άδειας είναι απαραίτητη για να επιλέξετε εικόνα</string>
+    <string name="save">Αποθήκευση</string>
+    <string name="error_fetching_image_from_gallery">Προέκυψε σφάλμα κατά την επιλογή εικόνας</string>
+    <string name="error_to_identify_user">Σφάλμα ταυτοποίησης χρήστη</string>
+    <string name="have_to_enroll_to_course">Θα πρέπει να εγγραφείτε στο μάθημα προκειμένου να δείτε τα περιεχόμενά του</string>
+    <string name="no_contents_for_this_course_yet">Δεν υπάρχουν ενότητες ακόμη</string>
+    <string name="previous">Προηγούμενο</string>
+    <string name="next">Επόμενο</string>
+    <string name="image_over_limit">Η εικόνα δεν μπορεί να ξεπερνάει τα 2MB</string>
+</resources>
