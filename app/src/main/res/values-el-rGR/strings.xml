@@ -40,5 +40,5 @@
     <string name="no_contents_for_this_course_yet">Δεν υπάρχουν ενότητες ακόμη</string>
     <string name="previous">Προηγούμενο</string>
     <string name="next">Επόμενο</string>
-    <string name="image_over_limit">Η εικόνα δεν μπορεί να ξεπερνάει τα 2MB</string>
+    <string name="image_over_limit">Η εικόνα δεν μπορεί να ξεπερνάει τα 4MB</string>
 </resources>

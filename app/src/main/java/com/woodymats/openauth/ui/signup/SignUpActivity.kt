@@ -26,7 +26,6 @@ import com.woodymats.openauth.utils.hideKeyboard
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.quality
-import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
@@ -37,6 +36,7 @@ import java.util.Locale
 
 class SignUpActivity : AppCompatActivity() {
 
+    private val IMAGE_MAX_SIZE_MB: Int = 4
     private lateinit var binding: ActivitySignUpBinding
     private val viewModel: SignUpViewModel by lazy {
         ViewModelProvider(this).get(SignUpViewModel::class.java)
@@ -59,7 +59,7 @@ class SignUpActivity : AppCompatActivity() {
                     val tempFile = File(getRealPathFromUri(resultIntent?.data, baseContext) ?: "")
                     if (tempFile.exists()) {
                         val fileSize: Int = (tempFile.length() / 1048576).toInt()
-                        if (fileSize <= 2) {
+                        if (fileSize <= IMAGE_MAX_SIZE_MB) {
                             viewModel.setProfileImageFile(resultIntent?.data, null)
                         } else {
                             lifecycleScope.launch {
@@ -67,9 +67,9 @@ class SignUpActivity : AppCompatActivity() {
                                     Compressor.compress(baseContext, tempFile) {
                                         quality(80)
                                         format(Bitmap.CompressFormat.JPEG)
-                                        size(2_097_152) // 2 MB
+                                        // size(2_097_152) // 2 MB
                                     }
-                                if ((compressedImageFile.length() / 1048576).toInt() <=2) {
+                                if ((compressedImageFile.length() / 1048576).toInt() <= IMAGE_MAX_SIZE_MB) {
                                     viewModel.setProfileImageFile(null, compressedImageFile)
                                 } else {
                                     Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
