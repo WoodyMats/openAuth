@@ -67,9 +67,16 @@ class CoursesRepository(private val database: AppDatabase) {
         database.courseDAO.deleteAllCourses()
     }
 
-    suspend fun enrollToCourse(token: String, enrollToCourseModel: EnrollToCourseModel): CourseEntity {
+    suspend fun enrollToCourse(token: String, enrollToCourseModel: EnrollToCourseModel, userId: Long): CourseEntity {
         val chaptersFromNetworkResponse = RetrofitClient.apiInterface.enrollToCourse(token, enrollToCourseModel)
-        database.courseDAO.insertChaptersWithContents(mapToChapterListEntity(chaptersFromNetworkResponse))
+        database.courseDAO.updateCourseToEnrollment(userId, enrollToCourseModel.courseId)
+        if (!chaptersFromNetworkResponse.isNullOrEmpty()) {
+            database.courseDAO.insertChaptersWithContents(
+                mapToChapterListEntity(
+                    chaptersFromNetworkResponse
+                )
+            )
+        }
         return database.courseDAO.getCourseById(enrollToCourseModel.courseId)
     }
 

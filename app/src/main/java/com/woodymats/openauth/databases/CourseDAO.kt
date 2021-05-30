@@ -89,6 +89,9 @@ interface CourseDAO {
     @Query("SELECT COUNT(id) FROM courses_table")
     suspend fun getCourseRows(): Int
 
+    @Query("UPDATE courses_table SET user_id = :userId WHERE id == :courseId")
+    suspend fun updateCourseToEnrollment(userId: Long, courseId: Long): Int
+
     // @Query("SELECT * FROM courses_table WHERE courseTitle LIKE :query")
     // suspend fun search(query : String) : LiveData<List<CourseEntity>>
 }

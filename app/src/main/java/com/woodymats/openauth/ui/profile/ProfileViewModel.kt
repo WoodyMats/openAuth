@@ -36,9 +36,14 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
     val profileImageFile: LiveData<File?>
         get() = _profileImageFile
 
-    fun setProfileImageFile(profileImageUri: Uri?) {
+    fun setProfileImageFile(profileImageUri: Uri?, file: File?) {
         try {
-            _profileImageFile.value = File(getRealPathFromUri(profileImageUri, app) ?: "")
+            if (file != null) {
+                _profileImageFile.value = file
+                val a = true
+            } else {
+                _profileImageFile.value = File(getRealPathFromUri(profileImageUri, app) ?: "")
+            }
         } catch (e: IOException) {
             // Nothing for now
         }

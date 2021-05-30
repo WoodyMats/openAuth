@@ -41,7 +41,7 @@ class DownloadCoursesFromServerWorker(ctx: Context, params: WorkerParameters) :
             repository.insertUserEnrollmentsIntoDatabase(downloadedUserEnrollments, userId)
 
             val dailyWorkRequest = OneTimeWorkRequestBuilder<DownloadCoursesFromServerWorker>()
-                .setInitialDelay(24, TimeUnit.HOURS)
+                .setInitialDelay(12, TimeUnit.HOURS)
                 .setConstraints(
                     Constraints.Builder()
                     .setRequiresBatteryNotLow(true)
@@ -52,7 +52,7 @@ class DownloadCoursesFromServerWorker(ctx: Context, params: WorkerParameters) :
 
             WorkManager.getInstance(applicationContext).enqueueUniqueWork(
                 DOWNLOAD_DATA_FROM_SERVER_WORK_NAME,
-                ExistingWorkPolicy.APPEND_OR_REPLACE,
+                ExistingWorkPolicy.APPEND,
                 dailyWorkRequest
             )
 

@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
@@ -31,9 +32,13 @@ import com.woodymats.openauth.databinding.ProfileFragmentBinding
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.getRealPathFromUri
 import com.woodymats.openauth.utils.hideKeyboard
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
-import java.lang.String
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -59,18 +64,35 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val resultIntent = result.data
-                viewModel.setProfileImageFile(resultIntent?.data)
                 val updatedProfileImage: Bitmap?
                 try {
                     val tempFile = File(getRealPathFromUri(resultIntent?.data, fragmentContext!!) ?: "")
-                    val fileSize: Int = String.valueOf(tempFile.length() / 1048576).toInt()
-                    if (fileSize <= 2) {
+                    if (tempFile.exists()) {
                         updatedProfileImage = BitmapFactory.decodeStream(
                             fragmentContext!!.contentResolver.openInputStream(resultIntent!!.data!!)
                         )
-                        binding.profileImageView.setImageBitmap(updatedProfileImage)
+                        val fileSize: Int = (tempFile.length() / 1048576).toInt()
+                        if (fileSize <= 2) {
+                            viewModel.setProfileImageFile(resultIntent.data, null)
+                            binding.profileImageView.setImageBitmap(updatedProfileImage)
+                        } else {
+                            lifecycleScope.launch {
+                                val compressedImageFile =
+                                    Compressor.compress(fragmentContext!!, tempFile) {
+                                        quality(80)
+                                        format(Bitmap.CompressFormat.JPEG)
+                                        size(2_097_152) // 2 MB
+                                    }
+                                if ((compressedImageFile.length() / 1048576).toInt() <=2) {
+                                    viewModel.setProfileImageFile(null, compressedImageFile)
+                                    binding.profileImageView.setImageBitmap(updatedProfileImage)
+                                } else {
+                                    Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
                     } else {
-                        Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, R.string.error_fetching_image_from_gallery, Snackbar.LENGTH_SHORT).show()
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -235,6 +257,7 @@ class ProfileFragment : Fragment() {
     private fun openPhotoGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryIntent.type = "image/*"
+        galleryIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         pickImageLauncher.launch(galleryIntent)
     }
 

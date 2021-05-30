@@ -75,7 +75,7 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
             if (isEmpty) {
                 workManager.enqueueUniqueWork(
                     DOWNLOAD_DATA_FROM_SERVER_WORK_NAME,
-                    ExistingWorkPolicy.KEEP,
+                    ExistingWorkPolicy.REPLACE,
                     OneTimeWorkRequestBuilder<DownloadCoursesFromServerWorker>()
                         .addTag(TAG_OUTPUT)
                         .setConstraints(Constraints.Builder()

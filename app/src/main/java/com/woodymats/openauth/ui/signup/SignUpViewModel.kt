@@ -33,11 +33,14 @@ class SignUpViewModel(private val app: Application) : AndroidViewModel(app) {
     private var _profileImageFile: MutableLiveData<File?> = MutableLiveData(null)
     val profileImageFile: LiveData<File?>
         get() = _profileImageFile
-    fun setProfileImageFile(profileImageUri: Uri?) {
+    fun setProfileImageFile(profileImageUri: Uri?, file: File?) {
         try {
-            val temp = getRealPathFromUri(profileImageUri) ?: ""
-            _profileImageFile.value = File(getRealPathFromUri(profileImageUri) ?: "")
-            user.file = _profileImageFile.value
+            if (file != null) {
+                _profileImageFile.value = file
+            } else {
+                _profileImageFile.value = File(getRealPathFromUri(profileImageUri) ?: "")
+                user.file = _profileImageFile.value
+            }
         } catch (e: IOException) {
             // Nothing for now
         }

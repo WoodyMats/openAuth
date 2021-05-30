@@ -29,6 +29,7 @@ class CourseContentSharedViewModel(
     private var _chapterId: MutableLiveData<Long> = MutableLiveData(-1L)
     val chapterId: LiveData<Long>
         get() = _chapterId
+
     fun setChapterId(chapterId: Long) {
         _chapterId.value = chapterId
         if (_chapterId.value != -1L) {
@@ -79,22 +80,28 @@ class CourseContentSharedViewModel(
     }
 
     fun goToNextContent(v: View) {
-        if ((currentContentPosition.value ?: -1) >= 0 && (currentContentPosition.value ?: -1) < ((contentsList.value?.size ?: 0) - 1)) {
-            currentContentPosition.value =+ 1
+        if ((currentContentPosition.value ?: -1) >= 0 && (currentContentPosition.value
+                ?: -1) < ((contentsList.value?.size ?: 0) - 1)
+        ) {
+            currentContentPosition.value = currentContentPosition.value?.plus(1)
             _currentContent.value = _contentsList.value!![currentContentPosition.value ?: 0]
+            if ((_currentContent.value?.completed ?: -1) == 0) setContentAsCompleted(_currentContent.value?.id ?: -1)
         }
     }
 
     fun goToPreviousContent(v: View) {
         if ((currentContentPosition.value ?: -1) > 0) {
-            currentContentPosition.value =- 1
+            currentContentPosition.value = currentContentPosition.value?.minus(1)
             _currentContent.value = _contentsList.value!![currentContentPosition.value ?: 0]
+            if ((_currentContent.value?.completed ?: -1) == 0)  setContentAsCompleted(_currentContent.value?.id ?: -1)
         }
     }
 
     fun setContentAsCompleted(id: Long) {
-        viewModelScope.launch {
-            repository.setContentAsCompleted(id)
+        if (id != -1L) {
+            viewModelScope.launch {
+                repository.setContentAsCompleted(id)
+            }
         }
     }
 }

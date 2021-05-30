@@ -12,6 +12,7 @@ import com.woodymats.openauth.models.local.CourseEntity
 import com.woodymats.openauth.models.EnrollToCourseModel
 import com.woodymats.openauth.repositories.CoursesRepository
 import com.woodymats.openauth.utils.ApiCallStatus
+import com.woodymats.openauth.utils.USER_ID
 import com.woodymats.openauth.utils.USER_TOKEN
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -24,6 +25,7 @@ class CourseDetailsViewModel(
 ) : ViewModel() {
 
     private var userToken = preferences.getString(USER_TOKEN, "").toString()
+    private var userId = preferences.getLong(USER_ID, -1L)
     private val repository = CoursesRepository(database)
 
     private var _course: MutableLiveData<CourseEntity> = MutableLiveData(null)
@@ -93,7 +95,7 @@ class CourseDetailsViewModel(
             try {
                 showLoader()
                 _course.value =
-                    repository.enrollToCourse(userToken, EnrollToCourseModel(courseId = courseId))
+                    repository.enrollToCourse(userToken, EnrollToCourseModel(courseId = courseId), userId)
                 setChaptersWithContents()
                 _callStatus.value = ApiCallStatus.SUCCESS
             } catch (e: HttpException) {

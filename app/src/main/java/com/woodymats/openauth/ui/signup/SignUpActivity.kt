@@ -4,21 +4,32 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.woodymats.openauth.R
 import com.woodymats.openauth.databinding.ActivitySignUpBinding
 import com.woodymats.openauth.utils.ApiCallStatus
+import com.woodymats.openauth.utils.getRealPathFromUri
 import com.woodymats.openauth.utils.hideKeyboard
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -44,7 +55,38 @@ class SignUpActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val resultIntent = result.data
-                viewModel.setProfileImageFile(resultIntent?.data)
+                try {
+                    val tempFile = File(getRealPathFromUri(resultIntent?.data, baseContext) ?: "")
+                    if (tempFile.exists()) {
+                        val fileSize: Int = (tempFile.length() / 1048576).toInt()
+                        if (fileSize <= 2) {
+                            viewModel.setProfileImageFile(resultIntent?.data, null)
+                        } else {
+                            lifecycleScope.launch {
+                                val compressedImageFile =
+                                    Compressor.compress(baseContext, tempFile) {
+                                        quality(80)
+                                        format(Bitmap.CompressFormat.JPEG)
+                                        size(2_097_152) // 2 MB
+                                    }
+                                if ((compressedImageFile.length() / 1048576).toInt() <=2) {
+                                    viewModel.setProfileImageFile(null, compressedImageFile)
+                                } else {
+                                    Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    } else {
+                        Snackbar.make(binding.root, R.string.error_fetching_image_from_gallery, Snackbar.LENGTH_SHORT).show()
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(
+                        baseContext,
+                        getString(R.string.error_fetching_image_from_gallery),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -100,6 +142,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun openPhotoGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryIntent.type = "image/*"
+        galleryIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         pickImageLauncher.launch(galleryIntent)
     }
 
