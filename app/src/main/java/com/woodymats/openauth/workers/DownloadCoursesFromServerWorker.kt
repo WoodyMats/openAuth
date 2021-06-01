@@ -41,18 +41,19 @@ class DownloadCoursesFromServerWorker(ctx: Context, params: WorkerParameters) :
             repository.insertUserEnrollmentsIntoDatabase(downloadedUserEnrollments, userId)
 
             val dailyWorkRequest = OneTimeWorkRequestBuilder<DownloadCoursesFromServerWorker>()
-                .setInitialDelay(12, TimeUnit.HOURS)
+                .setInitialDelay(8, TimeUnit.HOURS)
                 .setConstraints(
                     Constraints.Builder()
-                    .setRequiresBatteryNotLow(true)
-                    .setRequiredNetworkType(NetworkType.UNMETERED)
-                    .build())
+                        .setRequiresBatteryNotLow(true)
+                        .setRequiredNetworkType(NetworkType.UNMETERED)
+                        .build()
+                )
                 .addTag(TAG_OUTPUT)
                 .build()
 
             WorkManager.getInstance(applicationContext).enqueueUniqueWork(
                 DOWNLOAD_DATA_FROM_SERVER_WORK_NAME,
-                ExistingWorkPolicy.APPEND,
+                ExistingWorkPolicy.APPEND_OR_REPLACE,
                 dailyWorkRequest
             )
 

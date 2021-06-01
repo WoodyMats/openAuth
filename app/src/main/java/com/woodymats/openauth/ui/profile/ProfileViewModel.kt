@@ -6,6 +6,7 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -40,7 +41,6 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
         try {
             if (file != null) {
                 _profileImageFile.value = file
-                val a = true
             } else {
                 _profileImageFile.value = File(getRealPathFromUri(profileImageUri, app) ?: "")
             }
@@ -207,6 +207,10 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
                     else -> _callStatus.value = ApiCallStatus.UNKNOWNERROR
                 }
                 hideLoader()
+            } catch (e: Exception) {
+                hideLoader()
+                _callStatus.value = ApiCallStatus.UNKNOWNERROR
+                Log.d("hello", e.message ?: "")
             }
         }
     }

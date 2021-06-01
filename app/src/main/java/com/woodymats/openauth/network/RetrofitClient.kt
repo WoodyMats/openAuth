@@ -10,6 +10,7 @@ object RetrofitClient {
     private const val BASE_URL: String = "http://167.99.40.193/api/"
 
     private val gson = GsonBuilder()
+        .setLenient()
         .create()
 
     private val retrofitClient: Retrofit.Builder by lazy {

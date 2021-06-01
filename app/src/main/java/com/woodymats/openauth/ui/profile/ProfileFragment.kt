@@ -115,7 +115,7 @@ class ProfileFragment : Fragment() {
         val viewModelFactory =
             ProfileViewModelFactory(getInstance(fragmentContext!!), requireActivity().application)
         viewModel = ViewModelProvider(
-            requireActivity(),
+            this,
             viewModelFactory
         ).get(ProfileViewModel::class.java)
     }

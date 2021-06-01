@@ -29,7 +29,7 @@ class UserRepository(private val database: AppDatabase? = null) {
             "file",
             user.file!!.path,
             fileRequestBody
-        ) //createFormData("file", user.file!!.name, fileRequestBody)
+        ) // createFormData("file", user.file!!.name, fileRequestBody)
         val firstName = RequestBody.create(MultipartBody.FORM, user.firstName)
         val lastName = RequestBody.create(MultipartBody.FORM, user.lastName)
         val email = RequestBody.create(MultipartBody.FORM, user.email)
@@ -85,8 +85,17 @@ class UserRepository(private val database: AppDatabase? = null) {
         val lastNameRb = RequestBody.create(MultipartBody.FORM, lastName)
         val dateOfBirthRb = RequestBody.create(MultipartBody.FORM, dateOfBirth.toString())
 
-        val user = RetrofitClient.apiInterface.updateUserWithFile(token, file, firstNameRb, lastNameRb, dateOfBirthRb)
-        database?.userDAO?.updateUser(user)
+        val user = RetrofitClient.apiInterface.updateUserWithFile(
+            token,
+            file,
+            firstNameRb,
+            lastNameRb,
+            dateOfBirthRb
+        )
+        val a = true
+        if (user != null) {
+            database?.userDAO?.updateUser(user)
+        }
         return database?.userDAO!!.getUser()
     }
 
@@ -96,8 +105,15 @@ class UserRepository(private val database: AppDatabase? = null) {
         lastName: String,
         dateOfBirth: Long
     ): UserEntity {
-        val user = RetrofitClient.apiInterface.updateUserWithoutFile(token, firstName, lastName, dateOfBirth)
-        database?.userDAO?.updateUser(user)
+        val user = RetrofitClient.apiInterface.updateUserWithoutFile(
+            token,
+            firstName,
+            lastName,
+            dateOfBirth
+        )
+        if (user != null) {
+            database?.userDAO?.updateUser(user)
+        }
         return database?.userDAO!!.getUser()
     }
 }

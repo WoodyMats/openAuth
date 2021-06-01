@@ -78,10 +78,11 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
                     ExistingWorkPolicy.REPLACE,
                     OneTimeWorkRequestBuilder<DownloadCoursesFromServerWorker>()
                         .addTag(TAG_OUTPUT)
-                        .setConstraints(Constraints.Builder()
-                            .setRequiresBatteryNotLow(true)
-                            .setRequiredNetworkType(NetworkType.UNMETERED)
-                            .build()
+                        .setConstraints(
+                            Constraints.Builder()
+                                .setRequiresBatteryNotLow(true)
+                                .setRequiredNetworkType(NetworkType.UNMETERED)
+                                .build()
                         ).build()
                 )
             }
@@ -96,9 +97,9 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
         enqueueWorkIfCourseTableIsEmpty()
 
         // if (haveToFetchFromServer()) {
-            // clearAllCourseRelatedData()
+        // clearAllCourseRelatedData()
         //     getAllCourses()
-            // getUserEnrollments()
+        // getUserEnrollments()
         // } else {
         //     getUserEnrollmentsFromCache()
         //     getAllCoursesFromCache()
@@ -166,7 +167,8 @@ class HomeFragmentViewModel(private val app: Application) : AndroidViewModel(app
             showLoader()
             try {
                 if (hasInternetConnection(app)) {
-                    _enrollments.value = repository.downloadUserEnrollmentsAndGetThemFromCache(userToken, userId)
+                    _enrollments.value =
+                        repository.downloadUserEnrollmentsAndGetThemFromCache(userToken, userId)
                     _callStatus.value = ApiCallStatus.SUCCESS
                 } else {
                     _callStatus.value = ApiCallStatus.NOINTERNETERROR

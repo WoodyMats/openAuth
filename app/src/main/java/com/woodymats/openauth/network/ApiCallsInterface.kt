@@ -71,7 +71,7 @@ interface ApiCallsInterface {
         @Part("firstName") firstName: RequestBody,
         @Part("lastName") lastName: RequestBody,
         @Part("dateOfBirth") dateOfBirth: RequestBody
-    ): UserEntity
+    ): UserEntity?
 
     @POST("updateUser")
     suspend fun updateUserWithoutFile(
@@ -79,6 +79,6 @@ interface ApiCallsInterface {
         @Query("firstName") firstName: String,
         @Query("lastName") lastName: String,
         @Query("dateOfBirth") dateOfBirth: Long
-    ): UserEntity
+    ): UserEntity?
 
 }

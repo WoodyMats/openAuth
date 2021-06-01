@@ -14,7 +14,6 @@ import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.TAG_OUTPUT
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import java.lang.Exception
 
 class MainActivityViewModel(
     private val app: Application,

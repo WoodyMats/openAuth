@@ -46,31 +46,37 @@ class HomeFragment : Fragment(), CourseRecyclerViewClickListener {
     }
 
     private fun setUpObservers() {
-        viewModel.outputWorkInfo.observe(viewLifecycleOwner, { listOfWorkInfo ->
-            if (!listOfWorkInfo.isNullOrEmpty()) {
-                val workInfo = listOfWorkInfo[0]
-                when (workInfo.state) {
-                    WorkInfo.State.SUCCEEDED -> {
-                        val succeeded = workInfo.outputData.getBoolean(WORKER_STATUS, false)
-                        if (succeeded) {
+        viewModel.outputWorkInfo.observe(
+            viewLifecycleOwner,
+            { listOfWorkInfo ->
+                if (!listOfWorkInfo.isNullOrEmpty()) {
+                    val workInfo = listOfWorkInfo[0]
+                    when (workInfo.state) {
+                        WorkInfo.State.SUCCEEDED -> {
+                            val succeeded = workInfo.outputData.getBoolean(WORKER_STATUS, false)
+                            if (succeeded) {
+                                viewModel.getCoursesAndEnrollmentsFromCache()
+                            }
+                        }
+                        WorkInfo.State.ENQUEUED -> {
                             viewModel.getCoursesAndEnrollmentsFromCache()
                         }
-                    }
-                    WorkInfo.State.ENQUEUED -> {
-                        // viewModel.getCoursesAndEnrollmentsFromCache()
-                    }
-                    WorkInfo.State.CANCELLED -> {}//Toast.makeText(context, "Work has cancelled!", Toast.LENGTH_SHORT).show()
-                    WorkInfo.State.FAILED -> {
-                        val succeeded = workInfo.outputData.getBoolean(WORKER_STATUS, false)
-                        if (!succeeded) {
-                            viewModel.getCoursesAndEnrollmentsFromCache()
+                        WorkInfo.State.CANCELLED -> {
+                        } // Toast.makeText(context, "Work has cancelled!", Toast.LENGTH_SHORT).show()
+                        WorkInfo.State.FAILED -> {
+                            val succeeded = workInfo.outputData.getBoolean(WORKER_STATUS, false)
+                            if (!succeeded) {
+                                viewModel.getCoursesAndEnrollmentsFromCache()
+                            }
                         }
+                        WorkInfo.State.BLOCKED -> {
+                        } // Toast.makeText(context, "Work has blocked!", Toast.LENGTH_SHORT).show()
+                        WorkInfo.State.RUNNING -> {
+                        } // Toast.makeText(context, "Work is running!", Toast.LENGTH_SHORT).show()
                     }
-                    WorkInfo.State.BLOCKED -> {}//Toast.makeText(context, "Work has blocked!", Toast.LENGTH_SHORT).show()
-                    WorkInfo.State.RUNNING -> {} //Toast.makeText(context, "Work is running!", Toast.LENGTH_SHORT).show()
                 }
             }
-        })
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,7 +131,8 @@ class HomeFragment : Fragment(), CourseRecyclerViewClickListener {
         // }
         // val courseCardDetailTransitionName = getString(R.string.course_details_transition_name)
         // val extras = FragmentNavigatorExtras(view to courseCardDetailTransitionName)
-        val action = HomeFragmentDirections.actionNavHomeToCourseDetailsFragment(course.id, hideBottomBar)
-        findNavController().navigate(action)//, extras)
+        val action =
+            HomeFragmentDirections.actionNavHomeToCourseDetailsFragment(course.id, hideBottomBar)
+        findNavController().navigate(action) // , extras)
     }
 }
