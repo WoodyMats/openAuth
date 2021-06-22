@@ -18,6 +18,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
@@ -27,7 +31,9 @@ import com.woodymats.openauth.databinding.NavHeaderMainBinding
 import com.woodymats.openauth.ui.login.LoginActivity
 import com.woodymats.openauth.utils.ApiCallStatus
 import com.woodymats.openauth.utils.PREFERENCES
+import com.woodymats.openauth.utils.SEND_DEVICE_TOKEN_TO_SERVER_TAG
 import com.woodymats.openauth.utils.USER_TOKEN
+import com.woodymats.openauth.workers.SendDeviceTokenWorker
 
 class MainActivity : AppCompatActivity() {
 
@@ -84,13 +90,23 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Get new FCM registration token
-            val token = task.result
-
+            sendRegistrationToServer(task.result ?: "")
             // Log and toast
-            val msg = token ?: ""
-            Log.d(TAG, msg)
+            // Log.d(TAG, token)
             // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
+    }
+
+    private fun sendRegistrationToServer(token: String) {
+        val work = OneTimeWorkRequest.Builder(SendDeviceTokenWorker::class.java)
+        val data = Data.Builder()
+        data.putString("deviceId", token)
+        work.setInputData(data.build())
+        WorkManager.getInstance(applicationContext).enqueueUniqueWork(
+            SEND_DEVICE_TOKEN_TO_SERVER_TAG,
+            ExistingWorkPolicy.REPLACE,
+            work.build())
+        Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
     private fun setUpViewModel() {

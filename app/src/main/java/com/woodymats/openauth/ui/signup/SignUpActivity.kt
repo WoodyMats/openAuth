@@ -72,12 +72,20 @@ class SignUpActivity : AppCompatActivity() {
                                 if ((compressedImageFile.length() / 1048576).toInt() <= IMAGE_MAX_SIZE_MB) {
                                     viewModel.setProfileImageFile(null, compressedImageFile)
                                 } else {
-                                    Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
+                                    Snackbar.make(
+                                        binding.root,
+                                        R.string.image_over_limit,
+                                        Snackbar.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         }
                     } else {
-                        Snackbar.make(binding.root, R.string.error_fetching_image_from_gallery, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            binding.root,
+                            R.string.error_fetching_image_from_gallery,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -257,15 +265,20 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun showDatePicker() {
+        val minCal = Calendar.getInstance(Locale.getDefault())
+        minCal[1940, Calendar.JANUARY, 1, 0, 0] = 0
         val calendar = MaterialDatePicker.Builder.datePicker()
         calendar.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
         calendar.setTitleText(R.string.date_of_birth)
         calendar.setCalendarConstraints(
-            CalendarConstraints.Builder().setEnd(
-                Calendar.getInstance(
-                    Locale.getDefault()
-                ).timeInMillis
-            ).build()
+            CalendarConstraints.Builder().setStart(
+                minCal.timeInMillis
+            )
+                .setEnd(
+                    Calendar.getInstance(
+                        Locale.getDefault()
+                    ).timeInMillis
+                ).build()
         )
         val picker = calendar.build()
         picker.addOnPositiveButtonClickListener { dateLong ->

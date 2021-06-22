@@ -66,7 +66,8 @@ class ProfileFragment : Fragment() {
                 val resultIntent = result.data
                 val updatedProfileImage: Bitmap?
                 try {
-                    val tempFile = File(getRealPathFromUri(resultIntent?.data, fragmentContext!!) ?: "")
+                    val tempFile =
+                        File(getRealPathFromUri(resultIntent?.data, fragmentContext!!) ?: "")
                     if (tempFile.exists()) {
                         updatedProfileImage = BitmapFactory.decodeStream(
                             fragmentContext!!.contentResolver.openInputStream(resultIntent!!.data!!)
@@ -87,12 +88,20 @@ class ProfileFragment : Fragment() {
                                     viewModel.setProfileImageFile(null, compressedImageFile)
                                     binding.profileImageView.setImageBitmap(updatedProfileImage)
                                 } else {
-                                    Snackbar.make(binding.root, R.string.image_over_limit, Snackbar.LENGTH_SHORT).show()
+                                    Snackbar.make(
+                                        binding.root,
+                                        R.string.image_over_limit,
+                                        Snackbar.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         }
                     } else {
-                        Snackbar.make(binding.root, R.string.error_fetching_image_from_gallery, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            binding.root,
+                            R.string.error_fetching_image_from_gallery,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -213,20 +222,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showDatePicker() {
+        val minCal = Calendar.getInstance(Locale.getDefault())
+        minCal.time = Date(-946771200000)
         val calendar = MaterialDatePicker.Builder.datePicker()
         calendar.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
         calendar.setTitleText(R.string.date_of_birth)
         calendar.setCalendarConstraints(
-            CalendarConstraints.Builder().setEnd(
-                Calendar.getInstance(
-                    Locale.getDefault()
-                ).timeInMillis
-            ).build()
+            CalendarConstraints.Builder().setStart(
+                minCal.timeInMillis
+            )
+                .setEnd(
+                    Calendar.getInstance(
+                        Locale.getDefault()
+                    ).timeInMillis
+                ).build()
         )
         val picker = calendar.build()
         picker.addOnPositiveButtonClickListener { dateLong ->
             val dateFormat = SimpleDateFormat("MM/dd/yy", Locale.getDefault())
-            val dateString = dateFormat.format(Date(dateLong))
+            val date = Date(dateLong)
+            val dateString = dateFormat.format(date)
             binding.dateOfBirthEditText.setText(dateString)
         }
         picker.show(requireFragmentManager(), "DATE_PICKER")

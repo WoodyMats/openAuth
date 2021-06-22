@@ -37,7 +37,7 @@ class MainActivityViewModel(
         viewModelScope.launch {
             try {
                 _callStatus.value = ApiCallStatus.LOADING
-                repository.logoutUser(database, "Bearer $token", preferences)
+                repository.logoutUser(database, token, preferences)
                 WorkManager.getInstance(app).cancelAllWorkByTag(TAG_OUTPUT)
                 WorkManager.getInstance(app).pruneWork()
                 _callStatus.value = ApiCallStatus.SUCCESS

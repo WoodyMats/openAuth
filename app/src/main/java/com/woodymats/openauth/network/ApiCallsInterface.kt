@@ -1,13 +1,13 @@
 package com.woodymats.openauth.network
 
 import com.google.gson.JsonObject
-import com.woodymats.openauth.models.remote.CourseNetworkEntity
 import com.woodymats.openauth.models.EnrollToCourseModel
-import com.woodymats.openauth.models.remote.EnrollmentNetworkEntity
 import com.woodymats.openauth.models.LoginEntity
 import com.woodymats.openauth.models.SignUpEntity
 import com.woodymats.openauth.models.local.UserEntity
 import com.woodymats.openauth.models.remote.ChapterNetworkEntity
+import com.woodymats.openauth.models.remote.CourseNetworkEntity
+import com.woodymats.openauth.models.remote.EnrollmentNetworkEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -27,12 +27,22 @@ interface ApiCallsInterface {
     suspend fun loginUser(@Body entity: LoginEntity): UserEntity
 
     @Headers("Content-Type: application/json")
+    @POST("sendDeviceToken")
+    suspend fun sendDeviceId(
+        @Header("Authorization") token: String,
+        @Query("deviceId") deviceId: String
+    )
+
+    @Headers("Content-Type: application/json")
     @POST("register")
     suspend fun createAccount(@Body signUpEntity: SignUpEntity): JsonObject
 
     @Headers("Content-Type: application/json")
     @GET("logout")
-    suspend fun logout(@Header("Authorization") token: String): Response<JsonObject>
+    suspend fun logout(
+        @Header("Authorization") token: String,
+        @Query("logoutFromAndroid") logoutFromAndroid: Boolean
+    ): JsonObject
 
     @Headers("Content-Type: application/json")
     @GET("allCourses")
@@ -80,5 +90,4 @@ interface ApiCallsInterface {
         @Query("lastName") lastName: String,
         @Query("dateOfBirth") dateOfBirth: Long
     ): UserEntity?
-
 }

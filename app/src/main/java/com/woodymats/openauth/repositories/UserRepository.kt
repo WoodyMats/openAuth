@@ -22,6 +22,10 @@ class UserRepository(private val database: AppDatabase? = null) {
         RetrofitClient.apiInterface.createAccount(signUpEntity)
     }
 
+    suspend fun sendDeviceToken(token: String, deviceToken: String) {
+        RetrofitClient.apiInterface.sendDeviceId(token, deviceToken)
+    }
+
     suspend fun registerUserWithProfileImage(user: SignUpEntity) {
 
         val fileRequestBody = RequestBody.create(MediaType.parse("image/*"), user.file!!)
@@ -59,7 +63,7 @@ class UserRepository(private val database: AppDatabase? = null) {
     }
 
     suspend fun logoutUser(database: AppDatabase, token: String, preferences: SharedPreferences) {
-        RetrofitClient.apiInterface.logout(token)
+        RetrofitClient.apiInterface.logout(token, logoutFromAndroid = true)
         withContext(Dispatchers.IO) {
             database.clearAllTables()
             preferences.edit()

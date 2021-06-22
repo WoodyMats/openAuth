@@ -61,6 +61,10 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
     val user: LiveData<UserEntity>
         get() = _user
 
+    private var _dateOfBirthToString: MutableLiveData<String> = MutableLiveData(null)
+    val dateOfBirthToString: LiveData<String>
+        get() = _dateOfBirthToString
+
     private var _firstNameErrorMessage: MutableLiveData<String> = MutableLiveData(null)
     val firstNameErrorMessage: LiveData<String>
         get() = _firstNameErrorMessage
@@ -218,6 +222,7 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
     private fun getUserFromCache() {
         viewModelScope.launch {
             _user.value = repository.getUser()
+            showDateOfBirth()
         }
     }
 
@@ -233,8 +238,9 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
         _editMode.value = !(_editMode.value ?: false)
     }
 
-    fun showDateOfBirth(): String {
+    private fun showDateOfBirth(): LiveData<String> {
         val dateFormat = SimpleDateFormat("MM/dd/yy", Locale.getDefault())
-        return dateFormat.format(Date(user.value?.dateOfBirth ?: -1L))
+        _dateOfBirthToString.value = dateFormat.format(Date(user.value?.dateOfBirth ?: -1L))
+        return _dateOfBirthToString
     }
 }

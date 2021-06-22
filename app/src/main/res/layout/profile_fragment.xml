@@ -151,7 +151,7 @@
                         android:id="@+id/dateOfBirthEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{viewModel.showDateOfBirth}"
+                        android:text="@{viewModel.dateOfBirthToString}"
                         app:addTextChangedListener="@{viewModel.dateOfBirthTextWatcher}"
                         android:cursorVisible="false"
                         android:inputType="date" />

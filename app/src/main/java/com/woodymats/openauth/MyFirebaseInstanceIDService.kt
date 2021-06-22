@@ -9,8 +9,14 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.woodymats.openauth.utils.SEND_DEVICE_TOKEN_TO_SERVER_TAG
+import com.woodymats.openauth.workers.SendDeviceTokenWorker
 
 class MyFirebaseInstanceIDService : FirebaseMessagingService() {
 
@@ -35,12 +41,12 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
 
-            if (/* Check if data needs to be processed by long running job */ true) {
+            if (/* Check if data needs to be processed by long running job */ false) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
                 scheduleJob()
             } else {
                 // Handle message within 10 seconds
-                handleNow()
+                handleNow(remoteMessage.data)
             }
         }
 
@@ -76,8 +82,9 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
     /**
      * Handle time allotted to BroadcastReceivers.
      */
-    private fun handleNow() {
+    private fun handleNow(data: MutableMap<String, String>) {
         Log.d(TAG, "Short lived task is done.")
+        sendNotification(data["title"] ?: "OpenAuth Notification", data["body"] ?: "This is a notification from OpenAuth")
     }
 
     /**
@@ -88,8 +95,15 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
      *
      * @param token The new token.
      */
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
+    private fun sendRegistrationToServer(token: String) {
+        val work = OneTimeWorkRequest.Builder(SendDeviceTokenWorker::class.java)
+        val data = Data.Builder()
+        data.putString("deviceId", token)
+        work.setInputData(data.build())
+        WorkManager.getInstance(applicationContext).enqueueUniqueWork(
+            SEND_DEVICE_TOKEN_TO_SERVER_TAG,
+        ExistingWorkPolicy.REPLACE,
+            work.build())
         Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
@@ -98,7 +112,7 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageTitle: String, messageBody: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -108,7 +122,7 @@ class MyFirebaseInstanceIDService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.logo_image)
-            .setContentTitle("Notification Title: ")
+            .setContentTitle(messageTitle)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
