@@ -197,6 +197,7 @@ class ProfileViewModel(private val database: AppDatabase, private val app: Appli
                         token,
                         userToUpdate.firstName,
                         userToUpdate.lastName,
+                        userToUpdate.profileImage,
                         userToUpdate.dateOfBirth
                     )
                     _callStatus.value = ApiCallStatus.SUCCESS

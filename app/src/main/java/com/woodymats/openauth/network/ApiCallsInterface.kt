@@ -88,6 +88,7 @@ interface ApiCallsInterface {
         @Header("Authorization") token: String,
         @Query("firstName") firstName: String,
         @Query("lastName") lastName: String,
+        @Query("profileImage") profileImage: String,
         @Query("dateOfBirth") dateOfBirth: Long
     ): UserEntity?
 }

@@ -107,12 +107,14 @@ class UserRepository(private val database: AppDatabase? = null) {
         token: String,
         firstName: String,
         lastName: String,
+        profileImage: String,
         dateOfBirth: Long
     ): UserEntity {
         val user = RetrofitClient.apiInterface.updateUserWithoutFile(
             token,
             firstName,
             lastName,
+            profileImage,
             dateOfBirth
         )
         if (user != null) {

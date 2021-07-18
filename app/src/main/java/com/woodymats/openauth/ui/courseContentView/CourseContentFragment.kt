@@ -98,7 +98,7 @@ class CourseContentFragment : Fragment() {
         val mode = fragmentContext?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
         return when (mode) {
             Configuration.UI_MODE_NIGHT_YES -> {
-                return "<style>body{display: block; background-color: black; color: white;}</style><body>"
+                return "<style>body{display: block; background-color: #222C44; color: white;}</style><body>"
             }
             Configuration.UI_MODE_NIGHT_NO -> {
                 "<style>body{display: block; background-color: white; color: black;}</style><body>"
