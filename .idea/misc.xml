@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/layout/chapter_card_item_adapter.xml" value="0.1265625" />
         <entry key="app/src/main/res/layout/course_card_item_adapter.xml" value="0.45" />
         <entry key="app/src/main/res/layout/fragment_course_content.xml" value="0.14221014492753623" />
+        <entry key="app/src/main/res/layout/fragment_course_details.xml" value="0.1621376811594203" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.12107396149949341" />
       </map>
     </option>
