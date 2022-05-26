@@ -1,3 +1,7 @@
+@file:Suppress("NonExhaustiveWhenStatementMigration", "NonExhaustiveWhenStatementMigration",
+    "NonExhaustiveWhenStatementMigration"
+)
+
 package com.woodymats.openauth.ui.login
 
 import android.content.Intent

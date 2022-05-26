@@ -30,7 +30,7 @@
     <string name="enroll_string">Εγγραφή</string>
     <string name="enrolled_to_course">Εγγραφήκατε στο %1$s</string>
     <string name="already_enrolled">Είστε ήδη εγγεγραμένος στο μάθημα</string>
-    <string name="upload_a_profile_image">Επιλέξτε εικόνα… (Μέχρι: 2MB)</string>
+    <string name="upload_a_profile_image">Επιλέξτε εικόνα… (Μέχρι: 4MB)</string>
     <string name="menu_profile">Το προφίλ μου</string>
     <string name="write_files_permission_required">Η αποδοχή της άδειας είναι απαραίτητη για να επιλέξετε εικόνα</string>
     <string name="save">Αποθήκευση</string>
